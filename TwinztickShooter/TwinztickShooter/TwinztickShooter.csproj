@@ -43,8 +43,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Game1.cs" />
+    <Compile Include="Gamestates\GameOver.cs" />
+    <Compile Include="Gamestates\GamePlay.cs" />
+    <Compile Include="Gamestates\Menu.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sprites\Player\PlayerShip.cs" />
+    <Compile Include="Sprites\Sprite.cs" />
+    <Compile Include="TileMap\Background.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
