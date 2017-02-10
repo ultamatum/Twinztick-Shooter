@@ -17,12 +17,18 @@ namespace TwinztickShooter.Sprites.Player
         int screenHeight;
 
         Vector2 originPoint;
-        
+        Vector2 acceleration;
+        Vector2 stickPosition;
+        Vector2 shipRotation;
+
 
         public PlayerShip()
         {
             lives = 3;
             originPoint = new Vector2(16, 16);
+            direction = new Vector2(0, 0);
+            acceleration = new Vector2(2, 2);
+            
             screenWidth = Game1.GetScreenWidth();
             screenHeight = Game1.GetScreenHeight();
 
@@ -39,12 +45,21 @@ namespace TwinztickShooter.Sprites.Player
         {
             updateHitbox();
             UpdateRotation();
+
+            if (GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.LeftTrigger))
+            {
+                direction += (acceleration * shipRotation);
+            }
+
+            position += direction;
+            direction.X *= 0.95f;
+            direction.Y *= 0.95f;
         }
 
         public void Draw(SpriteBatch sp)
         {
             sp.Begin();
-            sp.Draw(image, position, null, tint, rotation, originPoint, 4.0f, SpriteEffects.None, 0);
+            sp.Draw(image, position, null, tint, rotation, originPoint, 1.0f, SpriteEffects.None, 0);
             sp.End();
         }
 
@@ -52,10 +67,12 @@ namespace TwinztickShooter.Sprites.Player
         {
             float gpx = GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.X;
             float gpy = GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.Y;
+            stickPosition = new Vector2(gpx, -gpy);
 
-            if (gpy != 0 && gpx != 0)
+            if(stickPosition != new Vector2(0, 0))
             {
-                rotation = (float)Math.Atan2(x, y);
+                shipRotation = new Vector2(gpx, -gpy);
+                rotation = (float)Math.Atan2(gpx, gpy);
             }
         }
     }
