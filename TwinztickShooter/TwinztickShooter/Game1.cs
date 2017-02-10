@@ -9,10 +9,17 @@ namespace TwinztickShooter
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        public int screenWidth = 1920;
+        public int screenHeight = 1080;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
+            graphics.PreferredBackBufferWidth = screenWidth;
+            graphics.PreferredBackBufferHeight = screenHeight;
+            graphics.IsFullScreen = true;
         }
         
         protected override void Initialize()
