@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TwinztickShooter.Gamestates;
 
 namespace TwinztickShooter.Sprites.Player
 {
@@ -15,6 +16,10 @@ namespace TwinztickShooter.Sprites.Player
         int lives;
         int screenWidth;
         int screenHeight;
+        float gpx;
+        float gpy;
+
+        bool playerLeft = false;
 
         Vector2 originPoint;
         Vector2 acceleration;
@@ -22,12 +27,13 @@ namespace TwinztickShooter.Sprites.Player
         Vector2 shipRotation;
 
 
-        public PlayerShip()
+        public PlayerShip(bool leftShip)
         {
             lives = 3;
             originPoint = new Vector2(16, 16);
             direction = new Vector2(0, 0);
             acceleration = new Vector2(2, 2);
+            playerLeft = leftShip;
             
             screenWidth = Game1.GetScreenWidth();
             screenHeight = Game1.GetScreenHeight();
@@ -45,15 +51,29 @@ namespace TwinztickShooter.Sprites.Player
         {
             updateHitbox();
             UpdateRotation();
-
-            if (GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.LeftTrigger))
+            
+            if(playerLeft)
             {
-                direction += (acceleration * shipRotation);
+                if (GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.LeftTrigger) && !GamePlay.IsFarApart())
+                {
+                    direction += (acceleration * shipRotation);
+                }
+            } else
+            {
+                if (GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.RightTrigger) && !GamePlay.IsFarApart())
+                {
+                    direction += (acceleration * shipRotation);
+                }
             }
-
+            
             position += direction;
             direction.X *= 0.95f;
             direction.Y *= 0.95f;
+
+            if (position.X <= 0 + image.Width / 2) position.X = 0 + image.Width / 2;
+            if (position.Y <= 0 + image.Height / 2) position.Y = 0 + image.Height / 2;
+            if (position.X >= (screenWidth - image.Width / 2)) position.X = screenWidth - image.Width / 2;
+            if (position.Y >= (screenHeight - image.Height / 2)) position.Y = screenHeight - image.Height / 2;
         }
 
         public void Draw(SpriteBatch sp)
@@ -65,9 +85,20 @@ namespace TwinztickShooter.Sprites.Player
 
         private void UpdateRotation()
         {
-            float gpx = GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.X;
-            float gpy = GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.Y;
-            stickPosition = new Vector2(gpx, -gpy);
+
+
+            if (playerLeft)
+            {
+                gpx = GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.X;
+                gpy = GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.Y;
+                stickPosition = new Vector2(gpx, -gpy);
+            }
+            else
+            {
+                gpx = GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.X;
+                gpy = GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.Y;
+                stickPosition = new Vector2(gpx, -gpy);
+            }
 
             if(stickPosition != new Vector2(0, 0))
             {

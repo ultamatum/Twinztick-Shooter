@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Content;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,9 @@ namespace TwinztickShooter.Gamestates
 {
     class GamePlay
     {
-        public PlayerShip ship = new PlayerShip();
+        public PlayerShip ship1 = new PlayerShip(false);
+        public PlayerShip ship2 = new PlayerShip(true);
+        static bool farApart = false;
 
         public GamePlay()
         {
@@ -21,17 +24,30 @@ namespace TwinztickShooter.Gamestates
 
         public void Init(ContentManager cm)
         {
-            ship.Init(cm);
+            ship1.Init(cm);
+            ship2.Init(cm);
         }
 
         public void Update()
         {
-            ship.Update();
+            ship1.Update();
+            ship2.Update();
+
+            if(Vector2.Distance(ship1.position, ship2.position) > 1000)
+            {
+                farApart = true;
+            }
         }
 
         public void Draw(SpriteBatch sp)
         {
-            ship.Draw(sp);
+            ship1.Draw(sp);
+            ship2.Draw(sp);
+        }
+
+        public static bool IsFarApart()
+        {
+            return farApart;
         }
     }
 }
