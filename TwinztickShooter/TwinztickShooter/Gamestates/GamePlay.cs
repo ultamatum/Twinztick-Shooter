@@ -18,6 +18,7 @@ namespace TwinztickShooter.Gamestates
         static bool farApart = false;
         public static Vector2 distanceBetweenShips = new Vector2();
         public List<Bullet> bullets = new List<Bullet>();
+        Random rng = new Random();
 
         public GamePlay()
         {
@@ -53,7 +54,13 @@ namespace TwinztickShooter.Gamestates
 
         public void spawnBullet(Vector2 position, Vector2 direction)
         {
-
+            Bullet newBullet = new Bullet();
+            Color selectedColor = new Color(rng.Next(255), rng.Next(255), rng.Next(255));
+            newBullet.position = position;
+            newBullet.direction = direction;
+            newBullet.image = bulletImage;
+            newBullet.tint = selectedColor;
+            bullets.Add(newBullet);
         }
 
         public static bool IsFarApart()

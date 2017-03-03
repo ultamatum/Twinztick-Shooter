@@ -9,7 +9,7 @@ namespace TwinztickShooter.Sprites
 {
     class Bullet : Sprite
     {
-        public Bullet(Vector2 spawnPosition, Vector2 spawnDirection)
+        public Bullet()
         {
 
         }
