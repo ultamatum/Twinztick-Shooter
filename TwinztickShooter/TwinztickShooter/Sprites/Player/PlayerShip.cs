@@ -19,7 +19,7 @@ namespace TwinztickShooter.Sprites.Player
         float gpx;
         float gpy;
 
-        bool playerLeft = false;
+        int player;
 
         Vector2 originPoint;
         Vector2 acceleration;
@@ -27,13 +27,13 @@ namespace TwinztickShooter.Sprites.Player
         Vector2 shipRotation;
 
 
-        public PlayerShip(bool leftShip)
+        public PlayerShip(int playerNumber)
         {
             lives = 3;
             originPoint = new Vector2(16, 16);
             direction = new Vector2(0, 0);
             acceleration = new Vector2(2, 2);
-            playerLeft = leftShip;
+            player = playerNumber;
             
             screenWidth = Game1.GetScreenWidth();
             screenHeight = Game1.GetScreenHeight();
@@ -52,28 +52,83 @@ namespace TwinztickShooter.Sprites.Player
             updateHitbox();
             UpdateRotation();
             
-            if(playerLeft)
-            {
-                if (GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.LeftTrigger) && !GamePlay.IsFarApart())
-                {
-                    direction += (acceleration * shipRotation);
-                }
-            } else
-            {
-                if (GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.RightTrigger) && !GamePlay.IsFarApart())
-                {
-                    direction += (acceleration * shipRotation);
-                }
-            }
-            
             position += direction;
             direction.X *= 0.95f;
             direction.Y *= 0.95f;
 
-            if (position.X <= 0 + image.Width / 2) position.X = 0 + image.Width / 2;
-            if (position.Y <= 0 + image.Height / 2) position.Y = 0 + image.Height / 2;
-            if (position.X >= (screenWidth - image.Width / 2)) position.X = screenWidth - image.Width / 2;
-            if (position.Y >= (screenHeight - image.Height / 2)) position.Y = screenHeight - image.Height / 2;
+            #region Far Apart Management
+            Vector2 intendedDirection = (direction + (acceleration * shipRotation));
+            intendedDirection.Normalize();
+            Vector2 distanceNormalized = GamePlay.distanceBetweenShips;
+            distanceNormalized.Normalize();
+            float scalar = Vector2.Dot(intendedDirection, distanceNormalized);
+
+            if (player == 1)
+            {
+                if (GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.LeftTrigger))
+                {
+                    if (!GamePlay.IsFarApart())
+                    {
+                        direction += (acceleration * shipRotation);
+                    }
+                    else
+                    {
+                        if (scalar > 0)
+                        {
+                            direction += (acceleration * shipRotation) * (float)(Math.Pow(GamePlay.distanceBetweenShips.Length(), -5));
+                        }
+                        else
+                        {
+                            direction += (acceleration * shipRotation);
+                        }
+                    }
+                }
+            }
+            else if (player == 2)
+            {
+                if (GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.RightTrigger))
+                {
+                    if (!GamePlay.IsFarApart())
+                    {
+                        direction += (acceleration * shipRotation);
+                    }
+                    else
+                    {
+                        if (scalar < 0)
+                        {
+                            direction += (acceleration * shipRotation) * (float)(Math.Pow(GamePlay.distanceBetweenShips.Length(), -5));
+                        }
+                        else
+                        {
+                            direction += (acceleration * shipRotation);
+                        }
+                    }
+                }
+            }
+            #endregion
+
+            #region Edge Check
+            if (position.X <= 0 + image.Width / 2)
+            {
+                position.X = 0 + image.Width / 2;
+                direction *= 0;
+            }
+            if (position.Y <= 0 + image.Height / 2)
+            {
+                position.Y = 0 + image.Height / 2;
+                direction *= 0;
+            }
+            if (position.X >= (screenWidth - image.Width / 2))
+            {
+                position.X = screenWidth - image.Width / 2;
+                direction *= 0;
+            }
+            if (position.Y >= (screenHeight - image.Height / 2))
+            {
+                position.Y = screenHeight - image.Height / 2;
+                direction *= 0;
+            }
+            #endregion
         }
 
         public void Draw(SpriteBatch sp)
@@ -85,9 +140,7 @@ namespace TwinztickShooter.Sprites.Player
 
         private void UpdateRotation()
         {
-
-
-            if (playerLeft)
+            if (player == 1)
             {
                 gpx = GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.X;
                 gpy = GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.Y;
