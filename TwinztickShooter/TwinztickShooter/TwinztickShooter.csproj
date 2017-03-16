@@ -48,7 +48,6 @@
     <Compile Include="Gamestates\Menu.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sprites\Bullet.cs" />
     <Compile Include="Sprites\Player\PlayerShip.cs" />
     <Compile Include="Sprites\Sprite.cs" />
     <Compile Include="TileMap\Background.cs" />

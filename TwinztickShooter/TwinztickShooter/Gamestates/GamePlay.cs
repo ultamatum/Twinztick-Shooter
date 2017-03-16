@@ -13,11 +13,9 @@ namespace TwinztickShooter.Gamestates
 {
     class GamePlay
     {
-        public PlayerShip ship1 = new PlayerShip(1);
-        public PlayerShip ship2 = new PlayerShip(2);
-
+        public PlayerShip ship1 = new PlayerShip(false);
+        public PlayerShip ship2 = new PlayerShip(true);
         static bool farApart = false;
-        public static Vector2 distanceBetweenShips = new Vector2();
 
         public GamePlay()
         {
@@ -35,14 +33,10 @@ namespace TwinztickShooter.Gamestates
             ship1.Update();
             ship2.Update();
 
-            if (Vector2.Distance(ship1.position, ship2.position) > 300)
+            if(Vector2.Distance(ship1.position, ship2.position) > 1000)
             {
                 farApart = true;
             }
-            else
-                farApart = false;
-
-            distanceBetweenShips = ship1.position - ship2.position;
         }
 
         public void Draw(SpriteBatch sp)
