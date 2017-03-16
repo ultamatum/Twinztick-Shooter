@@ -32,10 +32,11 @@ namespace TwinztickShooter.Gamestates
 
         public void Update()
         {
+            #region ship update
             ship1.Update();
             ship2.Update();
 
-            if (Vector2.Distance(ship1.position, ship2.position) > 300)
+            if (Vector2.Distance(ship1.position, ship2.position) > 500)
             {
                 farApart = true;
             }
@@ -43,6 +44,7 @@ namespace TwinztickShooter.Gamestates
                 farApart = false;
 
             distanceBetweenShips = ship1.position - ship2.position;
+            #endregion
         }
 
         public void Draw(SpriteBatch sp)

@@ -5,7 +5,7 @@ using TwinztickShooter.Gamestates;
 
 namespace TwinztickShooter
 {
-    public class Game1 : Game
+    public class TwinztickShooter : Game
     {
         Menu menu = new Menu();
         GamePlay game = new GamePlay();
@@ -20,7 +20,7 @@ namespace TwinztickShooter
         enum gamestate {menu, gamePlay, gameOver};
         static gamestate currentGameState = gamestate.gamePlay;
 
-        public Game1()
+        public TwinztickShooter()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";

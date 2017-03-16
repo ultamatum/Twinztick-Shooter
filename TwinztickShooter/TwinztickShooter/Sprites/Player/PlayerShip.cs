@@ -17,8 +17,11 @@ namespace TwinztickShooter.Sprites.Player
         int screenWidth;
         int screenHeight;
         int player;
+        int curFrame;
+        float friction = 0.85f;
         float gpx;
         float gpy;
+        bool leftGun = true;
         Random rng = new Random();
 
         List<Bullet> bullets = new List<Bullet>();
@@ -37,9 +40,9 @@ namespace TwinztickShooter.Sprites.Player
             direction = new Vector2(0, 0);
             acceleration = new Vector2(2, 2);
             player = playerNumber;
-            
-            screenWidth = Game1.GetScreenWidth();
-            screenHeight = Game1.GetScreenHeight();
+
+            screenWidth = TwinztickShooter.GetScreenWidth();
+            screenHeight = TwinztickShooter.GetScreenHeight();
 
             position.X = screenWidth / 2;
             position.Y = screenHeight / 2;
@@ -53,36 +56,61 @@ namespace TwinztickShooter.Sprites.Player
 
         public void Update()
         {
+            curFrame++;
+
             updateHitbox();
             UpdateRotation();
             UpdateDirection();
 
             position += direction;
-            direction.X *= 0.95f;
-            direction.Y *= 0.95f;
+            direction.X *= friction;
+            direction.Y *= friction;
 
-            for(int i = 0; i < bullets.Count(); i++)
+            for (int i = 0; i < bullets.Count(); i++)
             {
                 bullets[i].Update();
             }
 
-            if(GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.LeftShoulder))
+            #region Player Dependent Updates
+            switch (player)
             {
-                Vector2 spawnPosition = new Vector2(position.X, position.Y);
-                bool leftGun = true;
+                case 1:
+                    if (GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.LeftShoulder) && (curFrame % 5 == 0))
+                    {
+                        Vector2 spawnPosition = new Vector2(position.X, position.Y);
 
-                if (leftGun)
-                {
-                    spawnBullet(spawnPosition, direction, 5);
-                    leftGun = false;
-                }
-                else if (!leftGun)
-                {
-                    spawnBullet(spawnPosition, direction, -5);
-                    leftGun = true;
-                }
+                        if (leftGun)
+                        {
+                            spawnBullet(spawnPosition, direction, 5);
+                            leftGun = false;
+                        }
+                        else if (!leftGun)
+                        {
+                            spawnBullet(spawnPosition, direction, -10);
+                            leftGun = true;
+                        }
+                    }
+                    break;
+
+                case 2:
+                    if (GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.RightShoulder) && (curFrame % 5 == 0))
+                    {
+                        Vector2 spawnPosition = new Vector2(position.X, position.Y);
+
+                        if (leftGun)
+                        {
+                            spawnBullet(spawnPosition, direction, 5);
+                            leftGun = false;
+                        }
+                        else if (!leftGun)
+                        {
+                            spawnBullet(spawnPosition, direction, -10);
+                            leftGun = true;
+                        }
+                    }
+                    break;
             }
-
+            #endregion
 
             #region Edge Check
             if (position.X <= 0 + image.Width / 2)
@@ -136,13 +164,13 @@ namespace TwinztickShooter.Sprites.Player
                 stickPosition = new Vector2(gpx, -gpy);
             }
 
-            if(stickPosition != new Vector2(0, 0))
+            if (stickPosition != new Vector2(0, 0))
             {
                 shipRotation = new Vector2(gpx, -gpy);
                 rotation = (float)Math.Atan2(gpx, gpy);
             }
         }
-        
+
         //Updates the direction by getting the dot product of the intended direction of the ships and the distance between them to make sure they dont go too far apart
         private void UpdateDirection()
         {
@@ -154,8 +182,7 @@ namespace TwinztickShooter.Sprites.Player
 
             if (player == 1)
             {
-                if (GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.LeftTrigger))
-                {
+                if (GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.LeftTrigger)){
                     if (!GamePlay.IsFarApart())
                     {
                         direction += (acceleration * shipRotation);
@@ -203,10 +230,10 @@ namespace TwinztickShooter.Sprites.Player
             normalizedRotation.Normalize();
             Color selectedColor = new Color(rng.Next(255), rng.Next(255), rng.Next(255));
             Matrix m = Matrix.CreateRotationZ((float)Math.Atan2(shipRotation.Y, shipRotation.X));
-            Vector2 v = Vector2.Transform(new Vector2(image.Width / 2 + 3, 5), m);
+            Vector2 v = Vector2.Transform(new Vector2(image.Width / 2 + 3, xOffset), m);
             Bullet newBullet = new Bullet();
             newBullet.position = position + v;
-            newBullet.direction = normalizedRotation * Velocity;
+            newBullet.direction = normalizedRotation * Velocity + this.direction;
             newBullet.rotation = rotation;
             newBullet.image = bulletImage;
             newBullet.tint = selectedColor;
