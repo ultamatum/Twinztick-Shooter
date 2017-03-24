@@ -11,7 +11,7 @@ using TwinztickShooter.Gamestates;
 
 namespace TwinztickShooter.Sprites.Player
 {
-    class PlayerShip : Sprite
+    class PlayerShip : Sprite_Old
     {
         int lives;
         int screenWidth;

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace TwinztickShooter.Sprites
 {
-    class Bullet : Sprite
+    class Bullet : Sprite_Old
     {
         Vector2 originPoint;
 
