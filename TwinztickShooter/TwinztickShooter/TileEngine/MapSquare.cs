@@ -5,18 +5,19 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Tile_Engine
+namespace TwinztickShooter.Tile_Engine
 {
     [Serializable]
     public class MapSquare
     {
         #region Declarations
-        public int[] LayerTiles = new int[3];
-        public string CodeValue = "";
-        public bool Passable = true;
+        public int[] LayerTiles = new int[3];       //The amount of layers on the block.
+        public string CodeValue = "";               //A value used to know what spawns in this block.
+        public bool Passable = true;                //Whether or not the block is passable.
         #endregion
 
         #region Constructor
+        //Sets the values of the square on the map to the correcct values.
         public MapSquare(int background, int interactive, int foreground, string code, bool passable)
         {
             LayerTiles[0] = background;
@@ -28,6 +29,9 @@ namespace Tile_Engine
         #endregion
 
         #region Public Methods
+        /// <summary>
+        /// Toggles the fact a block is passable.
+        /// </summary>
         public void TogglePassable()
         {
             Passable = !Passable;

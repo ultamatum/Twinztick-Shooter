@@ -66,7 +66,7 @@ namespace TwinztickShooter
         
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.DeepPink);
+            GraphicsDevice.Clear(Color.Black);
 
             switch(currentGameState)
             {

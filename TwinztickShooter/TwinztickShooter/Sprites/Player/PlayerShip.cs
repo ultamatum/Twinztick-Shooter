@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TwinztickShooter.Gamestates;
+using TwinztickShooter.Tile_Engine;
 
 namespace TwinztickShooter.Sprites.Player
 {
@@ -44,8 +45,8 @@ namespace TwinztickShooter.Sprites.Player
             screenWidth = TwinztickShooter.GetScreenWidth();
             screenHeight = TwinztickShooter.GetScreenHeight();
 
-            position.X = screenWidth / 2;
-            position.Y = screenHeight / 2;
+            worldLocation.X = 960;
+            worldLocation.Y = 540;
         }
 
         public void Init(ContentManager cm)
@@ -62,9 +63,11 @@ namespace TwinztickShooter.Sprites.Player
             UpdateRotation();
             UpdateDirection();
 
-            position += direction;
+            worldLocation += direction;
             direction.X *= friction;
             direction.Y *= friction;
+
+            RepositionCamera();
 
             for (int i = 0; i < bullets.Count(); i++)
             {
@@ -77,7 +80,7 @@ namespace TwinztickShooter.Sprites.Player
                 case 1:
                     if (GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.LeftShoulder) && (curFrame % 5 == 0))
                     {
-                        Vector2 spawnPosition = new Vector2(position.X, position.Y);
+                        Vector2 spawnPosition = new Vector2(worldLocation.X, worldLocation.Y);
 
                         if (leftGun)
                         {
@@ -95,7 +98,7 @@ namespace TwinztickShooter.Sprites.Player
                 case 2:
                     if (GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.RightShoulder) && (curFrame % 5 == 0))
                     {
-                        Vector2 spawnPosition = new Vector2(position.X, position.Y);
+                        Vector2 spawnPosition = new Vector2(worldLocation.X, worldLocation.Y);
 
                         if (leftGun)
                         {
@@ -113,24 +116,24 @@ namespace TwinztickShooter.Sprites.Player
             #endregion
 
             #region Edge Check
-            if (position.X <= 0 + image.Width / 2)
+            if (worldLocation.X <= 0 + image.Width / 2)
             {
-                position.X = 0 + image.Width / 2;
+                worldLocation.X = 0 + image.Width / 2;
                 direction *= 0;
             }
-            if (position.Y <= 0 + image.Height / 2)
+            if (worldLocation.Y <= 0 + image.Height / 2)
             {
-                position.Y = 0 + image.Height / 2;
+                worldLocation.Y = 0 + image.Height / 2;
                 direction *= 0;
             }
-            if (position.X >= (screenWidth - image.Width / 2))
+            if (worldLocation.X >= (TileMap.MapWidth * 64 - image.Width / 2))
             {
-                position.X = screenWidth - image.Width / 2;
+                worldLocation.X = TileMap.MapWidth * 64 - image.Width / 2;
                 direction *= 0;
             }
-            if (position.Y >= (screenHeight - image.Height / 2))
+            if (worldLocation.Y >= (TileMap.MapHeight * 64 - image.Height / 2))
             {
-                position.Y = screenHeight - image.Height / 2;
+                worldLocation.Y = TileMap.MapHeight * 64 - image.Height / 2;
                 direction *= 0;
             }
             #endregion
@@ -138,9 +141,7 @@ namespace TwinztickShooter.Sprites.Player
 
         public void Draw(SpriteBatch sp)
         {
-            sp.Begin();
-            sp.Draw(image, position, null, tint, rotation, originPoint, 1.0f, SpriteEffects.None, 0);
-            sp.End();
+            sp.Draw(image, Camera.WorldToScreen(worldLocation), null, tint, rotation, originPoint, 1.0f, SpriteEffects.None, 0);
 
             for (int i = 0; i < bullets.Count(); i++)
             {
@@ -223,6 +224,32 @@ namespace TwinztickShooter.Sprites.Player
             }
         }
 
+        private void RepositionCamera()
+        {
+            int screenLocX = (int)Camera.WorldToScreen(worldLocation).X;
+            int screenLocY = (int)Camera.WorldToScreen(worldLocation).Y;
+
+            if (screenLocX > 1680)
+            {
+                Camera.Move(new Vector2(screenLocX - 1680, 0));
+            }
+
+            if (screenLocX < 200)
+            {
+                Camera.Move(new Vector2(screenLocX - 200, 0));
+            }
+
+            if (screenLocY > 820)
+            {
+                Camera.Move(new Vector2(0, screenLocY - 820));
+            }
+
+            if (screenLocY < 200)
+            {
+                Camera.Move(new Vector2(0, screenLocY - 200));
+            }
+        }
+
         public void spawnBullet(Vector2 position, Vector2 direction, int xOffset)
         {
             Vector2 Velocity = new Vector2(10, 10);
@@ -232,7 +259,7 @@ namespace TwinztickShooter.Sprites.Player
             Matrix m = Matrix.CreateRotationZ((float)Math.Atan2(shipRotation.Y, shipRotation.X));
             Vector2 v = Vector2.Transform(new Vector2(image.Width / 2 + 3, xOffset), m);
             Bullet newBullet = new Bullet();
-            newBullet.position = position + v;
+            newBullet.worldLocation = position + v;
             newBullet.direction = normalizedRotation * Velocity + this.direction;
             newBullet.rotation = rotation;
             newBullet.image = bulletImage;

@@ -11,19 +11,53 @@ namespace TwinztickShooter.Sprites
     class Sprite_Old
     {
         public Texture2D image;
-        public Vector2 position;
+        public Vector2 worldLocation;
         public Color tint = Color.White;
         public Vector2 direction;
         public float rotation;
         public Rectangle hitBox;
         public Rectangle previousHitBox;
 
+        protected bool enabled;
+        protected float drawDepth = 11.85f;
+
+        #region Properties
+        public bool Enabled
+        {
+            get { return enabled; }
+            set { enabled = value; }
+        }
+
+        public Vector2 WorldLocation
+        {
+            get { return worldLocation; }
+            set { worldLocation = value; }
+        }
+
+        public Vector2 WorldCenter
+        {
+            get
+            {
+                return new Vector2((int)worldLocation.X + (int)(image.Width / 2), (int)worldLocation.Y + (int)(image.Width / 2));
+            }
+        }
+
+        public Rectangle WorldRectangle
+        {
+            get
+            {
+                return new Rectangle((int)worldLocation.X, (int)worldLocation.Y, image.Width, image.Height);
+            }
+        }
+        
+        #endregion
+
         public void KnockAway(Sprite_Old target)
         {
             // return the target back to where it is just touching the edge of our sprite
             do
             {
-                target.position -= target.direction / 10;
+                target.worldLocation -= target.direction / 10;
                 target.updateHitbox();
             } while (hitBox.Intersects(target.hitBox));
 
@@ -54,33 +88,33 @@ namespace TwinztickShooter.Sprites
             {
                 // hit from bottom
                 direction.Y = Math.Abs(direction.Y);
-                position.Y = target.position.Y + target.image.Height + target.direction.Y;
+                worldLocation.Y = target.worldLocation.Y + target.image.Height + target.direction.Y;
             }
             else if (previousHitBox.Bottom <= target.previousHitBox.Top + 1)
             {
                 // hit from top
                 direction.Y = -Math.Abs(direction.Y);
-                position.Y = target.position.Y - image.Height + target.direction.Y;
+                worldLocation.Y = target.worldLocation.Y - image.Height + target.direction.Y;
             }
             else if (previousHitBox.Left >= target.previousHitBox.Right)
             {
                 // hit from right
                 direction.X = Math.Abs(direction.X);
-                position.X = target.position.X + target.image.Width + target.direction.X;
+                worldLocation.X = target.worldLocation.X + target.image.Width + target.direction.X;
             }
             else if (previousHitBox.Right <= target.previousHitBox.Left)
             {
                 // hit from left
                 direction.X = -Math.Abs(direction.X);
-                position.X = target.position.X - image.Width + target.direction.X;
+                worldLocation.X = target.worldLocation.X - image.Width + target.direction.X;
             }
         }
 
         public void updateHitbox()
         {
             previousHitBox = hitBox;
-            hitBox.X = (int)position.X;
-            hitBox.Y = (int)position.Y;
+            hitBox.X = (int)worldLocation.X;
+            hitBox.Y = (int)worldLocation.Y;
             hitBox.Width = image.Width;
             hitBox.Height = image.Height;
         }
