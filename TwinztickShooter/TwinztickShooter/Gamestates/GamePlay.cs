@@ -30,7 +30,7 @@ namespace TwinztickShooter.Gamestates
             ship1.Init(cm);
             ship2.Init(cm);
 
-            TileMap.Initialize(cm.Load<Texture2D>("starmap_old"));
+            TileMap.Initialize(cm.Load<Texture2D>("starmap"));
 
             Camera.WorldRectangle = new Rectangle(0, 0, TileMap.MapWidth * TileMap.TileWidth, TileMap.MapHeight * TileMap.TileHeight);
             Camera.ViewPortWidth = 1920;

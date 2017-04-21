@@ -14,7 +14,6 @@ namespace TwinztickShooter.Tile_Engine
         public const int MapWidth = 100;                 //The amount of tiles that go accross the length of the map
         public const int MapHeight = 100;                //The amount of tiles that go accross the height of the map
         public const int MapLayers = 3;                 //The amount of layers the map has.
-        private const int skyTile = 2;                  //The tile ID of the sky tile
 
         static private MapSquare[,] mapCells = new MapSquare[MapWidth, MapHeight];      //An array of blocks that cover the map
 
@@ -42,7 +41,7 @@ namespace TwinztickShooter.Tile_Engine
                     for (int z = 0; z < MapLayers; z++)
                     {
                         
-                        mapCells[x, y] = new MapSquare(rng.Next(64), 0, 0, "", true);
+                        mapCells[x, y] = new MapSquare(rng.Next(480), 0, 0, "", true);
                     }
                 }
             }
@@ -295,54 +294,7 @@ namespace TwinztickShooter.Tile_Engine
             return GetMapSquareAtPixel((int)pixelLocation.X, (int)pixelLocation.Y);
         }
         #endregion
-
-        #region Loading and Saving Maps
-        /// <summary>
-        /// Saves the map to a specified location
-        /// </summary>
-        /// <param name="fileStream">The location to save the map</param>
-        public static void SaveMap(FileStream fileStream)
-        {
-            BinaryFormatter formatter = new BinaryFormatter();          //Sets the formatter to be a binary formatter
-            formatter.Serialize(fileStream, mapCells);                  //Serializes the map in order for it to be easily loaded later
-            fileStream.Close();                                         //Closes the filestream
-        }
-
-        /// <summary>
-        /// Loads the map from a specified location
-        /// </summary>
-        /// <param name="fileStream">The location to load the map</param>
-        public static void LoadMap(FileStream fileStream)
-        {
-            try
-            {
-                BinaryFormatter formatter = new BinaryFormatter();                  //Sets the formatter to be a binary formatter
-                mapCells = (MapSquare[,])formatter.Deserialize(fileStream);         //Deserialises the map and sets the default map cells to the new values
-                fileStream.Close();                                                 //Closes the filestream
-            }
-            catch
-            {
-                ClearMap();                                                         //If this fails it sets the map to its default values
-            }
-        }
-
-        /// <summary>
-        /// Sets the entire map to its default values.
-        /// </summary>
-        public static void ClearMap()
-        {
-            for (int x = 0; x < MapWidth; x++)
-            {
-                for (int y = 0; y < MapHeight; y++)
-                {
-                    for (int z = 0; z < MapLayers; z++)
-                    {
-                        mapCells[x, y] = new MapSquare(2, 0, 0, "", true);
-                    }
-                }
-            }
-        }
-        #endregion
+        
 
         #region Drawing
         /// <summary>
@@ -403,6 +355,23 @@ namespace TwinztickShooter.Tile_Engine
             }
         }
         #endregion
+
+        public static void Update()
+        {
+            Random rng = new Random();
+
+            for (int x = 0; x < MapWidth; x++)
+            {
+                for (int y = 0; y < MapHeight; y++)
+                {
+                    for (int z = 0; z < MapLayers; z++)
+                    {
+
+                        mapCells[x, y] = new MapSquare(rng.Next(480), 0, 0, "", true);
+                    }
+                }
+            }
+        }
 
     }
 }

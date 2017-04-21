@@ -42,7 +42,7 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Game1.cs" />
+    <Compile Include="TwinztickShooter.cs" />
     <Compile Include="Gamestates\GameOver.cs" />
     <Compile Include="Gamestates\GamePlay.cs" />
     <Compile Include="Gamestates\Menu.cs" />
