@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace TwinztickShooter.Sprites
 {
-    class Sprite_Old
+    class Sprite
     {
         public Texture2D image;
         public Vector2 worldLocation;
@@ -52,7 +52,7 @@ namespace TwinztickShooter.Sprites
         
         #endregion
 
-        public void KnockAway(Sprite_Old target)
+        public void KnockAway(Sprite target)
         {
             // return the target back to where it is just touching the edge of our sprite
             do
@@ -82,7 +82,7 @@ namespace TwinztickShooter.Sprites
             target.direction *= initialSpeed;
         }
 
-        public void BounceOff(Sprite_Old target)
+        public void BounceOff(Sprite target)
         {
             if (previousHitBox.Top >= target.previousHitBox.Bottom)
             {

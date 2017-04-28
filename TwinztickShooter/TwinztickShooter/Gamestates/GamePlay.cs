@@ -32,9 +32,10 @@ namespace TwinztickShooter.Gamestates
 
             TileMap.Initialize(cm.Load<Texture2D>("starmap"));
 
-            Camera.WorldRectangle = new Rectangle(0, 0, TileMap.MapWidth * TileMap.TileWidth, TileMap.MapHeight * TileMap.TileHeight);
             Camera.ViewPortWidth = 1920;
             Camera.ViewPortHeight = 1080;
+            Camera.WorldRectangle = new Rectangle(0, 0, TileMap.MapWidth * TileMap.TileWidth, TileMap.MapHeight * TileMap.TileHeight);
+            Camera.Position = new Vector2(((TileMap.MapWidth * TileMap.TileWidth) / 2) - Camera.ViewPortWidth / 2, ((TileMap.MapHeight * TileMap.TileHeight) / 2) - Camera.ViewPortHeight / 2);
         }
 
         public void Update()

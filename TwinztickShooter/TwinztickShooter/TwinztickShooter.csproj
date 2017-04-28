@@ -51,7 +51,7 @@
     <Compile Include="Sprites\Animations\AnimationStrip.cs" />
     <Compile Include="Sprites\Bullet.cs" />
     <Compile Include="Sprites\Player\PlayerShip.cs" />
-    <Compile Include="Sprites\Sprite_Old.cs" />
+    <Compile Include="Sprites\Sprite.cs" />
     <Compile Include="TileEngine\Camera.cs" />
     <Compile Include="TileEngine\MapSquare.cs" />
     <Compile Include="TileEngine\TileMap.cs" />

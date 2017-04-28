@@ -12,8 +12,9 @@ using TwinztickShooter.Tile_Engine;
 
 namespace TwinztickShooter.Sprites.Player
 {
-    class PlayerShip : Sprite_Old
+    class PlayerShip : Sprite
     {
+        #region Variables
         int lives;
         int screenWidth;
         int screenHeight;
@@ -32,7 +33,7 @@ namespace TwinztickShooter.Sprites.Player
         Vector2 acceleration;
         Vector2 stickPosition;
         Vector2 shipRotation;
-
+        #endregion
 
         public PlayerShip(int playerNumber)
         {
@@ -45,13 +46,21 @@ namespace TwinztickShooter.Sprites.Player
             screenWidth = TwinztickShooter.GetScreenWidth();
             screenHeight = TwinztickShooter.GetScreenHeight();
 
-            worldLocation.X = 960;
-            worldLocation.Y = 540;
+            if(playerNumber == 1)
+            {
+                worldLocation.X = 3180;
+                worldLocation.Y = 3200;
+            } else
+            {
+                worldLocation.X = 3220;
+                worldLocation.Y = 3200;
+            }
+            
         }
 
         public void Init(ContentManager cm)
         {
-            image = cm.Load<Texture2D>("ship");
+            image = cm.Load<Texture2D>("ship" + player);
             bulletImage = cm.Load<Texture2D>("Bullet");
         }
 
@@ -135,6 +144,16 @@ namespace TwinztickShooter.Sprites.Player
             {
                 worldLocation.Y = TileMap.MapHeight * 64 - image.Height / 2;
                 direction *= 0;
+            }
+            #endregion
+
+            #region Bullet Edge Check
+            for(int i = 0; i < bullets.Count; i++)
+            {
+                if (bullets[i].worldLocation.X < 0 || bullets[i].worldLocation.X > (TileMap.MapWidth * TileMap.TileWidth) || bullets[i].worldLocation.Y < 0 || bullets[i].worldLocation.Y > (TileMap.MapHeight * TileMap.TileHeight))
+                {
+                    bullets.Remove(bullets[i]);
+                }
             }
             #endregion
         }

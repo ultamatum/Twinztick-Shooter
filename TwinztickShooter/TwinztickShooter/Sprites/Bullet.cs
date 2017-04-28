@@ -9,7 +9,7 @@ using TwinztickShooter.Tile_Engine;
 
 namespace TwinztickShooter.Sprites
 {
-    class Bullet : Sprite_Old
+    class Bullet : Sprite
     {
         Vector2 originPoint;
 
@@ -20,6 +20,7 @@ namespace TwinztickShooter.Sprites
         public void Update()
         {
             worldLocation += direction;
+            
         }
 
         public void Draw(SpriteBatch sp)
