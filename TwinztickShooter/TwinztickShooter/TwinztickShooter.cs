@@ -18,6 +18,8 @@ namespace TwinztickShooter
         public static int screenWidth = 1920;
         public static int screenHeight = 1080;
 
+        private static bool quitGame = false;
+
         enum gamestate {menu, gamePlay, gameOver};
         static gamestate currentGameState = gamestate.gamePlay;
         #endregion
@@ -54,6 +56,9 @@ namespace TwinztickShooter
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+                Exit();
+
+            if (quitGame)
                 Exit();
             
             switch(currentGameState)
@@ -125,6 +130,11 @@ namespace TwinztickShooter
         public static int GetScreenHeight()
         {
             return screenHeight;
+        }
+
+        public static void ExitGame()
+        {
+            quitGame = true;
         }
         #endregion
     }
