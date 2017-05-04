@@ -7,6 +7,7 @@ namespace TwinztickShooter
 {
     public class TwinztickShooter : Game
     {
+        #region Variables
         Menu menu = new Menu();
         GamePlay game = new GamePlay();
         GameOver gameOver = new GameOver();
@@ -19,7 +20,9 @@ namespace TwinztickShooter
 
         enum gamestate {menu, gamePlay, gameOver};
         static gamestate currentGameState = gamestate.gamePlay;
+        #endregion
 
+        #region Constructor
         public TwinztickShooter()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -29,7 +32,9 @@ namespace TwinztickShooter
             graphics.PreferredBackBufferHeight = screenHeight;
             graphics.IsFullScreen = false;
         }
-        
+        #endregion
+
+        #region Initialization
         protected override void Initialize()
         {
             base.Initialize();
@@ -40,9 +45,12 @@ namespace TwinztickShooter
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
         }
-        
+
         protected override void UnloadContent() {}
-        
+        #endregion
+
+        #region Gamestate Management
+        //Changes the update method based on the current gamestate
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
@@ -64,6 +72,7 @@ namespace TwinztickShooter
             base.Update(gameTime);
         }
         
+        //Changes the draw method based on the current gamestate
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
@@ -87,7 +96,7 @@ namespace TwinztickShooter
         /// <summary>
         /// Switch to a different gamestate.
         /// </summary>
-        /// <param name="stateID">1 = Menu, 2 = Game Play, 3 = Game Over</param>
+        /// <param name="stateID">1 = Menu, 2 = Play Game, 3 = Game Over</param>
         public static void SwitchGamestate(int stateID)
         {
             switch(stateID)
@@ -103,20 +112,20 @@ namespace TwinztickShooter
                     break;
             }
         }
+        #endregion
 
+        #region Getters and Setters
+        // Returns the screen width
         public static int GetScreenWidth()
         {
             return screenWidth;
         }
 
+        // Returns the screen height
         public static int GetScreenHeight()
         {
             return screenHeight;
         }
-
-        public void LoadImage(string fileName)
-        {
-            Content.Load < Texture2D >(fileName);
-        }
+        #endregion
     }
 }
