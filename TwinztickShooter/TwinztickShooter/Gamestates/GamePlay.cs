@@ -23,10 +23,7 @@ namespace TwinztickShooter.Gamestates
         #endregion
 
         #region Constructor
-        public GamePlay()
-        {
-            
-        }
+        public GamePlay(){}
         #endregion
 
         #region Initialization
@@ -35,18 +32,22 @@ namespace TwinztickShooter.Gamestates
             ship1.Init(cm);
             ship2.Init(cm);
 
+            #region Tile Engine set-up
+            //Sets up both the Tile Map and the Camera to be the default variables
             TileMap.Initialize(cm.Load<Texture2D>("starmap"));
 
             Camera.ViewPortWidth = 1920;
             Camera.ViewPortHeight = 1080;
             Camera.WorldRectangle = new Rectangle(0, 0, TileMap.MapWidth * TileMap.TileWidth, TileMap.MapHeight * TileMap.TileHeight);
             Camera.Position = new Vector2(((TileMap.MapWidth * TileMap.TileWidth) / 2) - Camera.ViewPortWidth / 2, ((TileMap.MapHeight * TileMap.TileHeight) / 2) - Camera.ViewPortHeight / 2);
+            #endregion
         }
         #endregion
 
+        #region Public Methods
         public void Update()
         {
-            #region ship update
+            #region Ship update
             ship1.Update();
             ship2.Update();
 
@@ -71,9 +72,11 @@ namespace TwinztickShooter.Gamestates
             sp.End();
         }
 
+        //Figures out if the player's ships are far enough apart that they can no longer move apart
         public static bool IsFarApart()
         {
             return farApart;
         }
+        #endregion
     }
 }

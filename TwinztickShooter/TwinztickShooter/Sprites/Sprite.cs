@@ -10,6 +10,7 @@ namespace TwinztickShooter.Sprites
 {
     class Sprite
     {
+        #region Declarations
         public Texture2D image;
         public Vector2 worldLocation;
         public Color tint = Color.White;
@@ -20,20 +21,30 @@ namespace TwinztickShooter.Sprites
 
         protected bool enabled;
         protected float drawDepth = 11.85f;
+        #endregion
 
         #region Properties
+        /// <summary>
+        /// Sets / Returns whether or not the sprite is enabled
+        /// </summary>
         public bool Enabled
         {
             get { return enabled; }
             set { enabled = value; }
         }
 
+        /// <summary>
+        /// Sets / Returns the location of the sprite in the world
+        /// </summary>
         public Vector2 WorldLocation
         {
             get { return worldLocation; }
             set { worldLocation = value; }
         }
 
+        /// <summary>
+        /// Returns the coordinates of the center of the world
+        /// </summary>
         public Vector2 WorldCenter
         {
             get
@@ -42,6 +53,9 @@ namespace TwinztickShooter.Sprites
             }
         }
 
+        /// <summary>
+        /// Returns the rectangle of the world
+        /// </summary>
         public Rectangle WorldRectangle
         {
             get
@@ -52,64 +66,8 @@ namespace TwinztickShooter.Sprites
         
         #endregion
 
-        public void KnockAway(Sprite target)
-        {
-            // return the target back to where it is just touching the edge of our sprite
-            do
-            {
-                target.worldLocation -= target.direction / 10;
-                target.updateHitbox();
-            } while (hitBox.Intersects(target.hitBox));
-
-            // preserve target's initial speed
-            float initialSpeed = target.direction.Length();
-
-            // find a vector directing the target away
-            target.direction.Y = target.hitBox.Center.Y - hitBox.Center.Y;
-            target.direction.X = target.hitBox.Center.X - hitBox.Center.X;
-
-            // make sure it isnt close to vertical or horizontal
-            if (target.direction.X == 0) target.direction.X = -1;
-            if (target.direction.Y == 0) target.direction.Y = -1;
-
-            while (Math.Abs(target.direction.X / target.direction.Y) < 0.1f)
-                target.direction.X *= 2;
-            while (Math.Abs(target.direction.Y / target.direction.X) < 0.1f)
-                target.direction.Y *= 2;
-
-            // normalise it and send it on its way, preserving speed
-            target.direction.Normalize();
-            target.direction *= initialSpeed;
-        }
-
-        public void BounceOff(Sprite target)
-        {
-            if (previousHitBox.Top >= target.previousHitBox.Bottom)
-            {
-                // hit from bottom
-                direction.Y = Math.Abs(direction.Y);
-                worldLocation.Y = target.worldLocation.Y + target.image.Height + target.direction.Y;
-            }
-            else if (previousHitBox.Bottom <= target.previousHitBox.Top + 1)
-            {
-                // hit from top
-                direction.Y = -Math.Abs(direction.Y);
-                worldLocation.Y = target.worldLocation.Y - image.Height + target.direction.Y;
-            }
-            else if (previousHitBox.Left >= target.previousHitBox.Right)
-            {
-                // hit from right
-                direction.X = Math.Abs(direction.X);
-                worldLocation.X = target.worldLocation.X + target.image.Width + target.direction.X;
-            }
-            else if (previousHitBox.Right <= target.previousHitBox.Left)
-            {
-                // hit from left
-                direction.X = -Math.Abs(direction.X);
-                worldLocation.X = target.worldLocation.X - image.Width + target.direction.X;
-            }
-        }
-
+        #region Public Methods
+        //Updates the position and location of the hitbox
         public void updateHitbox()
         {
             previousHitBox = hitBox;
@@ -118,5 +76,6 @@ namespace TwinztickShooter.Sprites
             hitBox.Width = image.Width;
             hitBox.Height = image.Height;
         }
+        #endregion
     }
 }

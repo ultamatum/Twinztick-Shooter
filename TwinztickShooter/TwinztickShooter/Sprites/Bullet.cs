@@ -11,22 +11,24 @@ namespace TwinztickShooter.Sprites
 {
     class Bullet : Sprite
     {
+        #region Declarations
         Vector2 originPoint;
+        #endregion
 
-        public Bullet()
-        {
-        }
+        #region Constructor
+        public Bullet() {}
+        #endregion
 
+        #region Public Methods
         public void Update()
         {
             worldLocation += direction;
-            
         }
 
         public void Draw(SpriteBatch sp)
         {
             sp.Draw(image, Camera.WorldToScreen(worldLocation), null, tint, rotation, originPoint, 2.0f, SpriteEffects.None, 0);
         }
-
+        #endregion
     }
 }

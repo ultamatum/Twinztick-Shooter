@@ -35,6 +35,8 @@ namespace TwinztickShooter.Sprites.Player
         Vector2 shipRotation;
         #endregion
 
+        #region Constructor
+        //Sets the default variables for the players
         public PlayerShip(int playerNumber)
         {
             lives = 3;
@@ -55,15 +57,19 @@ namespace TwinztickShooter.Sprites.Player
                 worldLocation.X = 3220;
                 worldLocation.Y = 3200;
             }
-            
         }
+        #endregion
 
+        #region Initialization
+        //Loads the neccesary images
         public void Init(ContentManager cm)
         {
             image = cm.Load<Texture2D>("ship" + player);
             bulletImage = cm.Load<Texture2D>("Bullet");
         }
+        #endregion
 
+        #region Public Methods
         public void Update()
         {
             curFrame++;
@@ -84,6 +90,7 @@ namespace TwinztickShooter.Sprites.Player
             }
 
             #region Player Dependent Updates
+            //Shoots out bullets from the guns on the front of each ship
             switch (player)
             {
                 case 1:
@@ -125,21 +132,25 @@ namespace TwinztickShooter.Sprites.Player
             #endregion
 
             #region Edge Check
+            //Stops the player from moving off the world
             if (worldLocation.X <= 0 + image.Width / 2)
             {
                 worldLocation.X = 0 + image.Width / 2;
                 direction *= 0;
             }
+
             if (worldLocation.Y <= 0 + image.Height / 2)
             {
                 worldLocation.Y = 0 + image.Height / 2;
                 direction *= 0;
             }
+
             if (worldLocation.X >= (TileMap.MapWidth * 64 - image.Width / 2))
             {
                 worldLocation.X = TileMap.MapWidth * 64 - image.Width / 2;
                 direction *= 0;
             }
+
             if (worldLocation.Y >= (TileMap.MapHeight * 64 - image.Height / 2))
             {
                 worldLocation.Y = TileMap.MapHeight * 64 - image.Height / 2;
@@ -148,6 +159,7 @@ namespace TwinztickShooter.Sprites.Player
             #endregion
 
             #region Bullet Edge Check
+            //Checks if the bullets have fallen off the world and if they have it removes them
             for(int i = 0; i < bullets.Count; i++)
             {
                 if (bullets[i].worldLocation.X < 0 || bullets[i].worldLocation.X > (TileMap.MapWidth * TileMap.TileWidth) || bullets[i].worldLocation.Y < 0 || bullets[i].worldLocation.Y > (TileMap.MapHeight * TileMap.TileHeight))
@@ -167,7 +179,9 @@ namespace TwinztickShooter.Sprites.Player
                 bullets[i].Draw(sp);
             }
         }
+        #endregion
 
+        #region Helper Methods
         //Updates the rotation by getting the position of the analogue sticks and then using Atan2 to change that angle of the ship
         private void UpdateRotation()
         {
@@ -243,6 +257,7 @@ namespace TwinztickShooter.Sprites.Player
             }
         }
 
+        //Moves the camera in order to keep the player on the screen
         private void RepositionCamera()
         {
             int screenLocX = (int)Camera.WorldToScreen(worldLocation).X;
@@ -269,7 +284,8 @@ namespace TwinztickShooter.Sprites.Player
             }
         }
 
-        public void spawnBullet(Vector2 position, Vector2 direction, int xOffset)
+        //Spawns a bullet at a specified location with a random colour
+        private void spawnBullet(Vector2 position, Vector2 direction, int xOffset)
         {
             Vector2 Velocity = new Vector2(10, 10);
             Vector2 normalizedRotation = shipRotation;
@@ -285,5 +301,6 @@ namespace TwinztickShooter.Sprites.Player
             newBullet.tint = selectedColor;
             bullets.Add(newBullet);
         }
+        #endregion
     }
 }

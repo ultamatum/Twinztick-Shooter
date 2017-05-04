@@ -295,7 +295,6 @@ namespace TwinztickShooter.Tile_Engine
         }
         #endregion
         
-
         #region Drawing
         /// <summary>
         /// Draws all the tiles to the screen
@@ -356,6 +355,7 @@ namespace TwinztickShooter.Tile_Engine
         }
         #endregion
 
+        #region Updating
         public static void Update()
         {
             Random rng = new Random();
@@ -372,6 +372,6 @@ namespace TwinztickShooter.Tile_Engine
                 }
             }
         }
-
+        #endregion
     }
 }
