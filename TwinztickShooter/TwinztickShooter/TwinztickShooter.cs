@@ -8,7 +8,7 @@ namespace TwinztickShooter
     public class TwinztickShooter : Game
     {
         #region Variables
-        Menu menu = new Menu();
+        Menu menu = new Menu(1920, 1080);
         GamePlay game = new GamePlay();
         GameOver gameOver = new GameOver();
 
@@ -21,7 +21,7 @@ namespace TwinztickShooter
         private static bool quitGame = false;
 
         enum gamestate {menu, gamePlay, gameOver};
-        static gamestate currentGameState = gamestate.gamePlay;
+        static gamestate currentGameState = gamestate.menu;
         #endregion
 
         #region Constructor
@@ -33,13 +33,18 @@ namespace TwinztickShooter
             graphics.PreferredBackBufferWidth = screenWidth;
             graphics.PreferredBackBufferHeight = screenHeight;
             graphics.IsFullScreen = false;
+
+           
         }
         #endregion
 
         #region Initialization
         protected override void Initialize()
         {
+            GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
+            graphics.ApplyChanges();
             base.Initialize();
+            menu.Init(Content);
             game.Init(Content);
         }
         
@@ -80,12 +85,12 @@ namespace TwinztickShooter
         //Changes the draw method based on the current gamestate
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Black);
+            GraphicsDevice.Clear(Color.Pink);
 
             switch(currentGameState)
             {
                 case gamestate.menu:
-                    menu.Draw();
+                    menu.Draw(spriteBatch);
                     break;
                 case gamestate.gamePlay:
                     game.Draw(spriteBatch);
