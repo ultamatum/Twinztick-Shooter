@@ -31,16 +31,8 @@ namespace TwinztickShooter.Gamestates
         {
             ship1.Init(cm);
             ship2.Init(cm);
-
-            #region Tile Engine set-up
-            //Sets up both the Tile Map and the Camera to be the default variables
+            
             TileMap.Initialize(cm.Load<Texture2D>("starmap"));
-
-            Camera.ViewPortWidth = 1920;
-            Camera.ViewPortHeight = 1080;
-            Camera.WorldRectangle = new Rectangle(0, 0, TileMap.MapWidth * TileMap.TileWidth, TileMap.MapHeight * TileMap.TileHeight);
-            Camera.Position = new Vector2(((TileMap.MapWidth * TileMap.TileWidth) / 2) - Camera.ViewPortWidth / 2, ((TileMap.MapHeight * TileMap.TileHeight) / 2) - Camera.ViewPortHeight / 2);
-            #endregion
         }
         #endregion
 
@@ -78,5 +70,13 @@ namespace TwinztickShooter.Gamestates
             return farApart;
         }
         #endregion
+
+        public void startup()
+        {
+            Camera.ViewPortWidth = 1920;
+            Camera.ViewPortHeight = 1080;
+            Camera.WorldRectangle = new Rectangle(0, 0, TileMap.MapWidth * TileMap.TileWidth, TileMap.MapHeight * TileMap.TileHeight);
+            Camera.Position = new Vector2(((TileMap.MapWidth * TileMap.TileWidth) / 2) - Camera.ViewPortWidth / 2, ((TileMap.MapHeight * TileMap.TileHeight) / 2) - Camera.ViewPortHeight / 2);
+        }
     }
 }

@@ -21,7 +21,7 @@ namespace TwinztickShooter
         private static bool quitGame = false;
 
         enum gamestate {menu, gamePlay, gameOver};
-        static gamestate currentGameState = gamestate.gamePlay;
+        static gamestate currentGameState = gamestate.menu;
         #endregion
 
         #region Constructor
@@ -32,9 +32,7 @@ namespace TwinztickShooter
 
             graphics.PreferredBackBufferWidth = screenWidth;
             graphics.PreferredBackBufferHeight = screenHeight;
-            graphics.IsFullScreen = false;
-
-           
+            graphics.IsFullScreen = true;
         }
         #endregion
 
