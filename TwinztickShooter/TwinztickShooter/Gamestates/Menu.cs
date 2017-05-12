@@ -13,8 +13,13 @@ namespace TwinztickShooter.Gamestates
     class Menu
     {
         #region Declarations
-        private String[] options = new String[3] { "Play", "Settings", "Quit"};
-        private int selection = 1;
+        private int currentChoice = 0;
+        private String[] options = new String[3] {
+            "PLAY",
+            "SETTINGS",
+            "QUIT"
+        };
+        
         private int screenWidth;
         private int screenHeight;
 
@@ -44,7 +49,7 @@ namespace TwinztickShooter.Gamestates
         {
             if (GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.A))
             {
-                switch(selection)
+                switch(currentChoice)
                 {
                     case 1:
                         TwinztickShooter.SwitchGamestate(2);
@@ -58,15 +63,29 @@ namespace TwinztickShooter.Gamestates
                 }
             }
 
-            if (selection > options.Length) selection = 1;
-            else if (selection < 1) selection = options.Length;
+            if (currentChoice > options.Length) currentChoice = 1;
+            else if (currentChoice < 1) currentChoice = options.Length;
         }
 
         public void Draw(SpriteBatch sb)
         {
+            Color colour;
+
             sb.Begin(samplerState: SamplerState.PointClamp);
             sb.Draw(logo, new Vector2(((screenWidth / 2) - ((logo.Width * 10) / 2)), ((screenHeight / 5) - ((logo.Height * 10) / 2))), null, Color.White, 0f, Vector2.Zero, 10f, SpriteEffects.None, 1f);
-            sb.DrawString(font, "SUCK!PENIS", new Vector2(10, 500), Color.Wheat, 0f, Vector2.Zero, 27f, SpriteEffects.None, 1f);
+
+            for (int i = 0; i < options.Length; i++)
+            {
+                if (i == currentChoice)
+                {
+                    colour = Color.DodgerBlue;
+                } else
+                {
+                    colour = Color.DarkRed;
+                }
+                sb.DrawString(font, options[i], new Vector2(screenWidth / 2 - font.MeasureString(options[i]).X * 7 / 2, (screenHeight / 8 * 4) + i * 150), colour, 0f, Vector2.Zero, 7f, SpriteEffects.None, 1f);
+            }
+
             sb.End();
         }
         #endregion

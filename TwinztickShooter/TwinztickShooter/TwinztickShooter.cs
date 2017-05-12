@@ -21,7 +21,7 @@ namespace TwinztickShooter
         private static bool quitGame = false;
 
         enum gamestate {menu, gamePlay, gameOver};
-        static gamestate currentGameState = gamestate.menu;
+        static gamestate currentGameState = gamestate.gamePlay;
         #endregion
 
         #region Constructor
@@ -85,7 +85,7 @@ namespace TwinztickShooter
         //Changes the draw method based on the current gamestate
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Pink);
+            GraphicsDevice.Clear(Color.Black);
 
             switch(currentGameState)
             {
