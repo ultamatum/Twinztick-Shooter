@@ -18,7 +18,7 @@ namespace TwinztickShooter
         public static int screenHeight = 1080;
 
         enum gamestate {menu, gamePlay, gameOver};
-        static gamestate currentGameState = gamestate.gamePlay;
+        static gamestate currentGameState = gamestate.menu;
 
         public TwinztickShooter()
         {

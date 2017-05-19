@@ -35,6 +35,7 @@ namespace TwinztickShooter.Sprites.Player
         Vector2 shipRotation;
         #endregion
 
+        #region Constructor
         public PlayerShip(int playerNumber)
         {
             lives = 3;
@@ -57,10 +58,12 @@ namespace TwinztickShooter.Sprites.Player
             }
             
         }
+        #endregion
 
+        #region Public Methods
         public void Init(ContentManager cm)
         {
-            image = cm.Load<Texture2D>("ship" + player);
+            image = cm.Load<Texture2D>("Player/ship" + player);
             bulletImage = cm.Load<Texture2D>("Bullet");
         }
 
@@ -150,10 +153,8 @@ namespace TwinztickShooter.Sprites.Player
             #region Bullet Edge Check
             for(int i = 0; i < bullets.Count; i++)
             {
-                if (bullets[i].worldLocation.X < 0 || bullets[i].worldLocation.X > (TileMap.MapWidth * TileMap.TileWidth) || bullets[i].worldLocation.Y < 0 || bullets[i].worldLocation.Y > (TileMap.MapHeight * TileMap.TileHeight))
-                {
+                if(!enabled)
                     bullets.Remove(bullets[i]);
-                }
             }
             #endregion
         }
@@ -167,7 +168,9 @@ namespace TwinztickShooter.Sprites.Player
                 bullets[i].Draw(sp);
             }
         }
+        #endregion
 
+        #region Helper Methods
         //Updates the rotation by getting the position of the analogue sticks and then using Atan2 to change that angle of the ship
         private void UpdateRotation()
         {
@@ -243,6 +246,9 @@ namespace TwinztickShooter.Sprites.Player
             }
         }
 
+        /// <summary>
+        /// Moves the camera so the player is always on the screen
+        /// </summary>
         private void RepositionCamera()
         {
             int screenLocX = (int)Camera.WorldToScreen(worldLocation).X;
@@ -269,6 +275,7 @@ namespace TwinztickShooter.Sprites.Player
             }
         }
 
+        //Spawns the bullets that the player shoots
         public void spawnBullet(Vector2 position, Vector2 direction, int xOffset)
         {
             Vector2 Velocity = new Vector2(10, 10);
@@ -285,5 +292,6 @@ namespace TwinztickShooter.Sprites.Player
             newBullet.tint = selectedColor;
             bullets.Add(newBullet);
         }
+        #endregion
     }
 }
