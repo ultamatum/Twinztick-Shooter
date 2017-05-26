@@ -7,7 +7,8 @@ namespace TwinztickShooter
 {
     public class TwinztickShooter : Game
     {
-        Menu menu = new Menu();
+        #region Variables
+        Menu menu = new Menu(1920, 1080);
         GamePlay game = new GamePlay();
         GameOver gameOver = new GameOver();
 
@@ -17,9 +18,13 @@ namespace TwinztickShooter
         public static int screenWidth = 1920;
         public static int screenHeight = 1080;
 
+        private static bool quitGame = false;
+
         enum gamestate {menu, gamePlay, gameOver};
         static gamestate currentGameState = gamestate.menu;
+        #endregion
 
+        #region Constructor
         public TwinztickShooter()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -27,12 +32,17 @@ namespace TwinztickShooter
 
             graphics.PreferredBackBufferWidth = screenWidth;
             graphics.PreferredBackBufferHeight = screenHeight;
-            graphics.IsFullScreen = false;
+            graphics.IsFullScreen = true;
         }
-        
+        #endregion
+
+        #region Initialization
         protected override void Initialize()
         {
+            GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
+            graphics.ApplyChanges();
             base.Initialize();
+            menu.Init(Content);
             game.Init(Content);
         }
         
@@ -40,12 +50,18 @@ namespace TwinztickShooter
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
         }
-        
+
         protected override void UnloadContent() {}
-        
+        #endregion
+
+        #region Gamestate Management
+        //Changes the update method based on the current gamestate
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+                Exit();
+
+            if (quitGame)
                 Exit();
             
             switch(currentGameState)
@@ -64,6 +80,7 @@ namespace TwinztickShooter
             base.Update(gameTime);
         }
         
+        //Changes the draw method based on the current gamestate
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
@@ -71,7 +88,7 @@ namespace TwinztickShooter
             switch(currentGameState)
             {
                 case gamestate.menu:
-                    menu.Draw();
+                    menu.Draw(spriteBatch);
                     break;
                 case gamestate.gamePlay:
                     game.Draw(spriteBatch);
@@ -87,7 +104,7 @@ namespace TwinztickShooter
         /// <summary>
         /// Switch to a different gamestate.
         /// </summary>
-        /// <param name="stateID">1 = Menu, 2 = Game Play, 3 = Game Over</param>
+        /// <param name="stateID">1 = Menu, 2 = Play Game, 3 = Game Over</param>
         public static void SwitchGamestate(int stateID)
         {
             switch(stateID)
@@ -103,20 +120,25 @@ namespace TwinztickShooter
                     break;
             }
         }
+        #endregion
 
+        #region Getters and Setters
+        // Returns the screen width
         public static int GetScreenWidth()
         {
             return screenWidth;
         }
 
+        // Returns the screen height
         public static int GetScreenHeight()
         {
             return screenHeight;
         }
 
-        public void LoadImage(string fileName)
+        public static void ExitGame()
         {
-            Content.Load < Texture2D >(fileName);
+            quitGame = true;
         }
+        #endregion
     }
 }

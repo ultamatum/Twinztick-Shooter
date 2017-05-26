@@ -27,21 +27,31 @@ namespace TwinztickShooter.Sprites
         public Rectangle previousHitBox;
 
         protected bool enabled;
+        protected float drawDepth = 11.85f;
         #endregion
 
         #region Properties
+        /// <summary>
+        /// Sets / Returns whether or not the sprite is enabled
+        /// </summary>
         public bool Enabled
         {
             get { return enabled; }
             set { enabled = value; }
         }
 
+        /// <summary>
+        /// Sets / Returns the location of the sprite in the world
+        /// </summary>
         public Vector2 WorldLocation
         {
             get { return worldLocation; }
             set { worldLocation = value; }
         }
 
+        /// <summary>
+        /// Returns the coordinates of the center of the world
+        /// </summary>
         public Vector2 WorldCenter
         {
             get
@@ -50,6 +60,9 @@ namespace TwinztickShooter.Sprites
             }
         }
 
+        /// <summary>
+        /// Returns the rectangle of the world
+        /// </summary>
         public Rectangle WorldRectangle
         {
             get
@@ -57,10 +70,10 @@ namespace TwinztickShooter.Sprites
                 return new Rectangle((int)worldLocation.X, (int)worldLocation.Y, image.Width, image.Height);
             }
         }
-
         #endregion
 
         #region Public Methods
+        //Updates the position and location of the hitbox
         public void updateHitbox()
         {
             previousHitBox = hitBox;
@@ -70,7 +83,7 @@ namespace TwinztickShooter.Sprites
             hitBox.Height = image.Height;
         }
         #endregion
-
+          
         #region Helper Methods
         public void Damage(int amount)
         {

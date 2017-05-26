@@ -37,7 +37,7 @@ namespace TwinztickShooter.Sprites
             sp.Draw(image, Camera.WorldToScreen(worldLocation), null, tint, rotation, originPoint, 2.0f, SpriteEffects.None, 0);
         }
         #endregion
-
+        
         #region Helper Methods
         /// <summary>
         /// Checks if the bullet has collided with something then gets removed and damages the sprite
