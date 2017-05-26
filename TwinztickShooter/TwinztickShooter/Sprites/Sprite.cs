@@ -12,10 +12,17 @@ namespace TwinztickShooter.Sprites
     {
         #region Declarations
         public Texture2D image;
+
         public Vector2 worldLocation;
-        public Color tint = Color.White;
         public Vector2 direction;
+
+        public Color tint = Color.White;
+        
         public float rotation;
+        protected float drawDepth = 11.85f;
+
+        public int health;
+
         public Rectangle hitBox;
         public Rectangle previousHitBox;
 
@@ -63,7 +70,6 @@ namespace TwinztickShooter.Sprites
                 return new Rectangle((int)worldLocation.X, (int)worldLocation.Y, image.Width, image.Height);
             }
         }
-        
         #endregion
 
         #region Public Methods
@@ -75,6 +81,17 @@ namespace TwinztickShooter.Sprites
             hitBox.Y = (int)worldLocation.Y;
             hitBox.Width = image.Width;
             hitBox.Height = image.Height;
+        }
+        #endregion
+          
+        #region Helper Methods
+        public void Damage(int amount)
+        {
+            health -= amount;
+            if(health <= 0)
+            {
+                enabled = false;
+            }
         }
         #endregion
     }

@@ -64,7 +64,7 @@ namespace TwinztickShooter.Sprites.Player
         //Loads the neccesary images
         public void Init(ContentManager cm)
         {
-            image = cm.Load<Texture2D>("ship" + player);
+            image = cm.Load<Texture2D>("Player/ship" + player);
             bulletImage = cm.Load<Texture2D>("Bullet");
         }
         #endregion
@@ -162,10 +162,8 @@ namespace TwinztickShooter.Sprites.Player
             //Checks if the bullets have fallen off the world and if they have it removes them
             for(int i = 0; i < bullets.Count; i++)
             {
-                if (bullets[i].worldLocation.X < 0 || bullets[i].worldLocation.X > (TileMap.MapWidth * TileMap.TileWidth) || bullets[i].worldLocation.Y < 0 || bullets[i].worldLocation.Y > (TileMap.MapHeight * TileMap.TileHeight))
-                {
+                if(!enabled)
                     bullets.Remove(bullets[i]);
-                }
             }
             #endregion
         }
@@ -257,7 +255,10 @@ namespace TwinztickShooter.Sprites.Player
             }
         }
 
-        //Moves the camera in order to keep the player on the screen
+
+        /// <summary>
+        /// Moves the camera so the player is always on the screen
+        /// </summary>
         private void RepositionCamera()
         {
             int screenLocX = (int)Camera.WorldToScreen(worldLocation).X;
@@ -283,6 +284,7 @@ namespace TwinztickShooter.Sprites.Player
                 Camera.Move(new Vector2(0, screenLocY - 200));
             }
         }
+
 
         //Spawns a bullet at a specified location with a random colour
         private void spawnBullet(Vector2 position, Vector2 direction, int xOffset)

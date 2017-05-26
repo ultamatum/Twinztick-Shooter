@@ -42,6 +42,8 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Sprites\Enemies\Enemy.cs" />
+    <Compile Include="Sprites\Enemies\Frigate.cs" />
     <Compile Include="TwinztickShooter.cs" />
     <Compile Include="Gamestates\GameOver.cs" />
     <Compile Include="Gamestates\GamePlay.cs" />
@@ -72,6 +74,7 @@
   <ItemGroup>
     <None Include="app.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
