@@ -19,6 +19,7 @@ namespace TwinztickShooter
         public static int screenHeight = 1080;
 
         private static bool quitGame = false;
+        private static bool justChanged = true;
 
         enum gamestate {menu, gamePlay, gameOver};
         static gamestate currentGameState = gamestate.menu;
@@ -32,7 +33,7 @@ namespace TwinztickShooter
 
             graphics.PreferredBackBufferWidth = screenWidth;
             graphics.PreferredBackBufferHeight = screenHeight;
-            graphics.IsFullScreen = true;
+            graphics.IsFullScreen = false;
         }
         #endregion
 
@@ -42,8 +43,6 @@ namespace TwinztickShooter
             GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
             graphics.ApplyChanges();
             base.Initialize();
-            menu.Init(Content);
-            game.Init(Content);
         }
         
         protected override void LoadContent()
@@ -67,9 +66,19 @@ namespace TwinztickShooter
             switch(currentGameState)
             {
                 case gamestate.menu:
+                    if(justChanged)
+                    {
+                        menu.Init(Content);
+                        justChanged = false;
+                    }
                     menu.Update();
                     break;
                 case gamestate.gamePlay:
+                    if(justChanged)
+                    {
+                        game.Init(Content);
+                        justChanged = false;
+                    }
                     game.Update();
                     break;
                 case gamestate.gameOver:
@@ -88,9 +97,19 @@ namespace TwinztickShooter
             switch(currentGameState)
             {
                 case gamestate.menu:
+                    if (justChanged)
+                    {
+                        menu.Init(Content);
+                        justChanged = false;
+                    }
                     menu.Draw(spriteBatch);
                     break;
                 case gamestate.gamePlay:
+                    if (justChanged)
+                    {
+                        game.Init(Content);
+                        justChanged = false;
+                    }
                     game.Draw(spriteBatch);
                     break;
                 case gamestate.gameOver:
@@ -107,6 +126,8 @@ namespace TwinztickShooter
         /// <param name="stateID">1 = Menu, 2 = Play Game, 3 = Game Over</param>
         public static void SwitchGamestate(int stateID)
         {
+            justChanged = true;
+
             switch(stateID)
             {
                 case 0:

@@ -77,26 +77,26 @@ namespace TwinztickShooter.Gamestates
                 frigates[i].Update();
             }
 
-            if(rng.Next(10) == 6)
-            {
+            //if(rng.Next(10) == 6)
+            //{
                 SpawnFrigate();
-            }
+            //}
             #endregion
         }
 
-        public void Draw(SpriteBatch sp)
+        public void Draw(SpriteBatch sb)
         {
-            sp.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+            sb.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
 
-            TileMap.Draw(sp);
-            ship1.Draw(sp);
-            ship2.Draw(sp);
+            TileMap.Draw(sb);
+            ship1.Draw(sb);
+            ship2.Draw(sb);
 
             for(int i = 0; i < frigates.Count; i++)
             {
-                frigates[i].Draw();
+                frigates[i].Draw(sb);
             }
-            sp.End();
+            sb.End();
         }
 
         //Figures out if the player's ships are far enough apart that they can no longer move apart

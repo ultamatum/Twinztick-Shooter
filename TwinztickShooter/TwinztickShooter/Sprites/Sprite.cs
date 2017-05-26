@@ -26,8 +26,7 @@ namespace TwinztickShooter.Sprites
         public Rectangle hitBox;
         public Rectangle previousHitBox;
 
-        protected bool enabled;
-        protected float drawDepth = 11.85f;
+        protected bool enabled = true;
         #endregion
 
         #region Properties

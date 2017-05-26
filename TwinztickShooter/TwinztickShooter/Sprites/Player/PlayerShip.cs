@@ -15,24 +15,24 @@ namespace TwinztickShooter.Sprites.Player
     class PlayerShip : Sprite
     {
         #region Variables
-        int lives;
-        int screenWidth;
-        int screenHeight;
-        int player;
-        int curFrame;
-        float friction = 0.85f;
-        float gpx;
-        float gpy;
-        bool leftGun = true;
-        Random rng = new Random();
+        private int lives;
+        private int screenWidth;
+        private int screenHeight;
+        private int player;
+        private int curFrame;
+        private float friction = 0.85f;
+        private float gpx;
+        private float gpy;
+        private bool leftGun = true;
+        private Random rng = new Random();
 
-        List<Bullet> bullets = new List<Bullet>();
-        Texture2D bulletImage;
+        private List<Bullet> bullets = new List<Bullet>();
+        private Texture2D bulletImage;
 
-        Vector2 originPoint;
-        Vector2 acceleration;
-        Vector2 stickPosition;
-        Vector2 shipRotation;
+        private Vector2 originPoint;
+        private Vector2 acceleration;
+        private Vector2 stickPosition;
+        private Vector2 shipRotation;
         #endregion
 
         #region Constructor
@@ -168,13 +168,13 @@ namespace TwinztickShooter.Sprites.Player
             #endregion
         }
 
-        public void Draw(SpriteBatch sp)
+        public void Draw(SpriteBatch sb)
         {
-            sp.Draw(image, Camera.WorldToScreen(worldLocation), null, tint, rotation, originPoint, 1.0f, SpriteEffects.None, 0);
+            sb.Draw(image, Camera.WorldToScreen(worldLocation), null, tint, rotation, originPoint, 1.0f, SpriteEffects.None, 0);
 
             for (int i = 0; i < bullets.Count(); i++)
             {
-                bullets[i].Draw(sp);
+                bullets[i].Draw(sb);
             }
         }
         #endregion

@@ -20,6 +20,7 @@ namespace TwinztickShooter.Sprites
         #region Constructor
         public Bullet()
         {
+            enabled = true;
         }
         #endregion
 

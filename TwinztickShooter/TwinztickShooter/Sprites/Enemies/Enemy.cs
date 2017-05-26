@@ -32,8 +32,8 @@ namespace TwinztickShooter.Sprites.Enemies
             Double rotationVector = Math.Atan2(distanceVector.Y, distanceVector.X);
 
             rotationVector = MathHelper.WrapAngle((float)rotationVector);
-
-            if(rotationVector <= rotation - 50 && rotationVector >= rotation + 50)
+            
+            if ((rotation <= rotationVector + 0.5f && rotation  >= rotationVector - 0.5f) && (distanceVector.X < 700 && distanceVector.Y < 700 && distanceVector.X > -700 && distanceVector.Y > -700))
             {
                 knownPlayerInfo = player;
                 goalLocation = player.worldLocation;
