@@ -29,6 +29,8 @@ namespace TwinztickShooter.Sprites
         {
             worldLocation += direction;
 
+            UpdateHitbox();
+
             if (worldLocation.X < 0 || worldLocation.X > (TileMap.MapWidth * TileMap.TileWidth) || worldLocation.Y < 0 || worldLocation.Y > (TileMap.MapHeight * TileMap.TileHeight))
                 enabled = false;
         }

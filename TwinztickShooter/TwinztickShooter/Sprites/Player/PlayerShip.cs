@@ -26,7 +26,7 @@ namespace TwinztickShooter.Sprites.Player
         private bool leftGun = true;
         private Random rng = new Random();
 
-        private List<Bullet> bullets = new List<Bullet>();
+        public List<Bullet> bullets = new List<Bullet>();
         private Texture2D bulletImage;
 
         private Vector2 originPoint;
@@ -74,7 +74,7 @@ namespace TwinztickShooter.Sprites.Player
         {
             curFrame++;
 
-            updateHitbox();
+            UpdateHitbox();
             UpdateRotation();
             UpdateDirection();
 
@@ -87,6 +87,9 @@ namespace TwinztickShooter.Sprites.Player
             for (int i = 0; i < bullets.Count(); i++)
             {
                 bullets[i].Update();
+
+                if (bullets[i].Enabled == false)
+                    bullets.Remove(bullets[i]);
             }
 
             #region Player Dependent Updates
@@ -155,15 +158,6 @@ namespace TwinztickShooter.Sprites.Player
             {
                 worldLocation.Y = TileMap.MapHeight * 64 - image.Height / 2;
                 direction *= 0;
-            }
-            #endregion
-
-            #region Bullet Edge Check
-            //Checks if the bullets have fallen off the world and if they have it removes them
-            for(int i = 0; i < bullets.Count; i++)
-            {
-                if(!enabled)
-                    bullets.Remove(bullets[i]);
             }
             #endregion
         }

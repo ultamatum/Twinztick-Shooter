@@ -22,8 +22,11 @@ namespace TwinztickShooter.Gamestates
         public List<Frigate> frigates = new List<Frigate>();
 
         public Texture2D frigateImage;
+        private SpriteFont font;
 
         private Random rng = new Random();
+
+        public int score = 0;
 
         static bool farApart = false;
         public static Vector2 distanceBetweenShips = new Vector2();
@@ -44,6 +47,7 @@ namespace TwinztickShooter.Gamestates
             
             TileMap.Initialize(cm.Load<Texture2D>("starmap"));
             frigateImage = cm.Load<Texture2D>("Enemies/Enemy Frigate");
+            font = cm.Load<SpriteFont>("Pixel Font");
 
             Camera.ViewPortWidth = 1920;
             Camera.ViewPortHeight = 1080;
@@ -75,24 +79,43 @@ namespace TwinztickShooter.Gamestates
                 frigates[i].HuntForPlayer(ship1);
                 frigates[i].HuntForPlayer(ship2);
                 frigates[i].Update();
+
+                if(frigates[i].health <= 0)
+                {
+                    score += frigates[i].pointsGained;
+                    frigates.Remove(frigates[i]);
+                    if(i != 0) i--;
+                }
+
+                for(int b = 0; b < ship1.bullets.Count; b++)
+                {
+                    ship1.bullets[b].CollisionCheck(frigates[i]);
+                }
+
+                for (int b = 0; b < ship2.bullets.Count; b++)
+                {
+                    ship2.bullets[b].CollisionCheck(frigates[i]);
+                }
             }
 
-            //if(rng.Next(10) == 6)
-            //{
+            if(rng.Next(50) == 6)
+            {
                 SpawnFrigate();
-            //}
+            }
             #endregion
         }
 
         public void Draw(SpriteBatch sb)
         {
-            sb.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+            sb.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp);
 
             TileMap.Draw(sb);
             ship1.Draw(sb);
             ship2.Draw(sb);
 
-            for(int i = 0; i < frigates.Count; i++)
+            sb.DrawString(font, "SCORE: " + score, new Vector2((TwinztickShooter.screenWidth / 2 - (font.MeasureString("SCORE: " + score).X * 5) / 2), 10), Color.Yellow, 0f, Vector2.Zero, 5f, SpriteEffects.None, 0f);
+
+            for (int i = 0; i < frigates.Count; i++)
             {
                 frigates[i].Draw(sb);
             }

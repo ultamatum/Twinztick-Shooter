@@ -23,7 +23,7 @@ namespace TwinztickShooter.Sprites.Enemies
         {
             pointsGained = 100;
 
-            
+            health = 2;
 
             acceleration = 1;
             direction.X = 1;
@@ -99,6 +99,8 @@ namespace TwinztickShooter.Sprites.Enemies
             {
                 direction.Y = -1;
             }
+
+            UpdateHitbox();
         }
 
         public void Draw(SpriteBatch sb)

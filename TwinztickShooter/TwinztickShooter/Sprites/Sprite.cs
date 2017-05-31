@@ -73,11 +73,11 @@ namespace TwinztickShooter.Sprites
 
         #region Public Methods
         //Updates the position and location of the hitbox
-        public void updateHitbox()
+        public void UpdateHitbox()
         {
             previousHitBox = hitBox;
-            hitBox.X = (int)worldLocation.X;
-            hitBox.Y = (int)worldLocation.Y;
+            hitBox.X = (int)worldLocation.X - image.Width / 2;
+            hitBox.Y = (int)worldLocation.Y - image.Height / 2;
             hitBox.Width = image.Width;
             hitBox.Height = image.Height;
         }
