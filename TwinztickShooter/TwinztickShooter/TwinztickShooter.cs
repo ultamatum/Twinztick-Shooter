@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
+using System.IO;
 using TwinztickShooter.Gamestates;
 
 namespace TwinztickShooter
@@ -10,11 +12,13 @@ namespace TwinztickShooter
         #region Variables
         Menu menu = new Menu(1920, 1080);
         GamePlay game = new GamePlay();
-        GameOver gameOver = new GameOver();
+        GameOver gameOver = new GameOver(1920, 1080);
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-
+        
+        public static int score = 0;
+        public static int highscore = 0;
         public static int screenWidth = 1920;
         public static int screenHeight = 1080;
 
@@ -43,6 +47,8 @@ namespace TwinztickShooter
             GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
             graphics.ApplyChanges();
             base.Initialize();
+
+            LoadHighscore();
         }
         
         protected override void LoadContent()
@@ -87,7 +93,7 @@ namespace TwinztickShooter
                         gameOver.Init(Content);
                         justChanged = false;
                     }
-                    gameOver.Update();
+                    gameOver.Update(gameTime);
                     break;
             }
 
@@ -123,7 +129,7 @@ namespace TwinztickShooter
                         game.Init(Content);
                         justChanged = false;
                     }
-                    gameOver.Draw();
+                    gameOver.Draw(spriteBatch);
                     break;
             }
 
@@ -150,6 +156,28 @@ namespace TwinztickShooter
                     currentGameState = gamestate.gameOver;
                     break;
             }
+        }
+        #endregion
+
+        #region Helper Methods
+        private static void LoadHighscore()
+        {
+            if(File.Exists("score.txt"))
+            {
+                StreamReader inputFile = new StreamReader("score.txt");
+                highscore = Convert.ToInt32(inputFile.ReadLine());
+                inputFile.Close();
+            } else
+            {
+                highscore = 0;
+            }
+        }
+
+        public static void SaveHighScore()
+        {
+            StreamWriter outputFile = new StreamWriter("score.txt");
+            outputFile.WriteLine(highscore);
+            outputFile.Close();
         }
         #endregion
 

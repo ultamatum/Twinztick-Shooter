@@ -86,11 +86,6 @@ namespace TwinztickShooter.Sprites.Enemies
             direction.X = speed * (float)Math.Cos(rotation);
             direction.Y = speed * (float)Math.Sin(rotation);
 
-            if (direction.X == 0)
-            {
-                int i = 0;
-            }
-
             if (direction.X >= 1)
             {
                 direction.X = 1;

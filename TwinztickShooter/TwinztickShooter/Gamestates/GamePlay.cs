@@ -26,8 +26,6 @@ namespace TwinztickShooter.Gamestates
 
         private Random rng = new Random();
 
-        public int score = 0;
-
         static bool farApart = false;
         public static Vector2 distanceBetweenShips = new Vector2();
         #endregion
@@ -102,7 +100,7 @@ namespace TwinztickShooter.Gamestates
 
                 if(frigates[i].health <= 0)
                 {
-                    score += frigates[i].pointsGained;
+                    TwinztickShooter.score += frigates[i].pointsGained;
                     frigates.Remove(frigates[i]);
                     if(i != 0) i--;
                 }
@@ -125,7 +123,7 @@ namespace TwinztickShooter.Gamestates
 
                 if(ship1.hitBox.Intersects(frigates[i].hitBox))
                 {
-                    score += frigates[i].pointsGained;
+                    TwinztickShooter.score += frigates[i].pointsGained;
                     frigates.Remove(frigates[i]);
                     if (i != 0) i--;
                     ship1.Damage(20);
@@ -133,14 +131,14 @@ namespace TwinztickShooter.Gamestates
 
                 if (ship2.hitBox.Intersects(frigates[i].hitBox))
                 {
-                    score += frigates[i].pointsGained;
+                    TwinztickShooter.score += frigates[i].pointsGained;
                     frigates.Remove(frigates[i]);
                     if (i != 0) i--;
                     ship2.Damage(20);
                 }
             }
 
-            if(rng.Next(1000) < 10+score/500)
+            if(rng.Next(1000) < 10+ TwinztickShooter.score / 500)
             {
                 SpawnFrigate();
             }
@@ -155,7 +153,7 @@ namespace TwinztickShooter.Gamestates
             if (ship1.Enabled) ship1.Draw(sb);
             if (ship2.Enabled) ship2.Draw(sb);
 
-            sb.DrawString(font, "SCORE: " + score, new Vector2((TwinztickShooter.screenWidth / 2 - (font.MeasureString("SCORE: " + score).X * 5) / 2), 10), Color.Yellow, 0f, Vector2.Zero, 5f, SpriteEffects.None, 0f);
+            sb.DrawString(font, "SCORE: " + TwinztickShooter.score, new Vector2((TwinztickShooter.screenWidth / 2 - (font.MeasureString("SCORE: " + TwinztickShooter.score).X * 5) / 2), 10), Color.Yellow, 0f, Vector2.Zero, 5f, SpriteEffects.None, 0f);
 
             for (int i = 0; i < frigates.Count; i++)
             {
