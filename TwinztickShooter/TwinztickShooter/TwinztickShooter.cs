@@ -82,6 +82,11 @@ namespace TwinztickShooter
                     game.Update();
                     break;
                 case gamestate.gameOver:
+                    if (justChanged)
+                    {
+                        gameOver.Init(Content);
+                        justChanged = false;
+                    }
                     gameOver.Update();
                     break;
             }
@@ -113,6 +118,11 @@ namespace TwinztickShooter
                     game.Draw(spriteBatch);
                     break;
                 case gamestate.gameOver:
+                    if (justChanged)
+                    {
+                        game.Init(Content);
+                        justChanged = false;
+                    }
                     gameOver.Draw();
                     break;
             }
@@ -123,7 +133,7 @@ namespace TwinztickShooter
         /// <summary>
         /// Switch to a different gamestate.
         /// </summary>
-        /// <param name="stateID">1 = Menu, 2 = Play Game, 3 = Game Over</param>
+        /// <param name="stateID">0 = Menu, 1 = Play Game, 2 = Game Over</param>
         public static void SwitchGamestate(int stateID)
         {
             justChanged = true;

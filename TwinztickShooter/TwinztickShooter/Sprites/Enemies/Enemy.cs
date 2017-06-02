@@ -21,6 +21,7 @@ namespace TwinztickShooter.Sprites.Enemies
 
         public bool seenPlayer;
         public Vector2 goalLocation;
+        public Vector2 shipRotation;
         public PlayerShip knownPlayerInfo;
         #endregion
 
@@ -33,7 +34,7 @@ namespace TwinztickShooter.Sprites.Enemies
 
             rotationVector = MathHelper.WrapAngle((float)rotationVector);
             
-            if ((rotation <= rotationVector + 0.5f && rotation  >= rotationVector - 0.5f) && (distanceVector.X < 700 && distanceVector.Y < 700 && distanceVector.X > -700 && distanceVector.Y > -700))
+            if ((rotation <= rotationVector + 0.4f && rotation  >= rotationVector - 0.4f) && (distanceVector.X < 1000 && distanceVector.Y < 1000 && distanceVector.X > -1000 && distanceVector.Y > -1000))
             {
                 knownPlayerInfo = player;
                 goalLocation = player.worldLocation;
@@ -42,11 +43,7 @@ namespace TwinztickShooter.Sprites.Enemies
             {
                 goalLocation.X = rng.Next(TileMap.TileWidth * TileMap.MapWidth);
                 goalLocation.Y = rng.Next(TileMap.TileHeight * TileMap.MapHeight);
-                seenPlayer = false;
-            } else
-            {
-                seenPlayer = false;
-            }
+            } 
         }
         #endregion
     }

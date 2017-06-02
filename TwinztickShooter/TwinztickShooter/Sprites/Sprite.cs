@@ -69,6 +69,21 @@ namespace TwinztickShooter.Sprites
                 return new Rectangle((int)worldLocation.X, (int)worldLocation.Y, image.Width, image.Height);
             }
         }
+
+        /// <summary>
+        /// Sets / gets the health of the sprite
+        /// </summary>
+        public int Health
+        {
+            get
+            {
+                return health;
+            }
+            set
+            {
+                health -= value;
+            }
+        }
         #endregion
 
         #region Public Methods
@@ -78,8 +93,8 @@ namespace TwinztickShooter.Sprites
             previousHitBox = hitBox;
             hitBox.X = (int)worldLocation.X - image.Width / 2;
             hitBox.Y = (int)worldLocation.Y - image.Height / 2;
-            hitBox.Width = image.Width;
-            hitBox.Height = image.Height;
+            hitBox.Width = image.Width * 2;
+            hitBox.Height = image.Height * 2;
         }
         #endregion
           

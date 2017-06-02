@@ -44,6 +44,8 @@ namespace TwinztickShooter.Gamestates
         {
             ship1.Init(cm);
             ship2.Init(cm);
+
+            Frigate.Init(cm);
             
             TileMap.Initialize(cm.Load<Texture2D>("starmap"));
             frigateImage = cm.Load<Texture2D>("Enemies/Enemy Frigate");
@@ -60,24 +62,42 @@ namespace TwinztickShooter.Gamestates
         public void Update()
         {
             #region Ship update
-            ship1.Update();
-            ship2.Update();
+            if(ship1.Enabled) ship1.Update();
+            if (ship2.Enabled) ship2.Update();
 
-            if (Vector2.Distance(ship1.worldLocation, ship2.worldLocation) > 500)
+            if (Vector2.Distance(ship1.worldLocation, ship2.worldLocation) > 500 && ship1.Enabled && ship2.Enabled)
             {
                 farApart = true;
             }
             else
+            {
                 farApart = false;
+            }
 
             distanceBetweenShips = ship1.worldLocation - ship2.worldLocation;
+
+            if(ship1.health <= 0)
+            {
+                ship1.Enabled = false;
+            }
+
+            if(ship2.health <= 0)
+            {
+                ship2.Enabled = false;
+            }
+
+            if(!ship1.Enabled && !ship2.Enabled)
+            {
+                TwinztickShooter.SwitchGamestate(2);
+            }
             #endregion
 
             #region Enemy Update
             for(int i = 0; i < frigates.Count; i++)
             {
-                frigates[i].HuntForPlayer(ship1);
-                frigates[i].HuntForPlayer(ship2);
+                frigates[i].seenPlayer = false;
+                if (ship1.Enabled) frigates[i].HuntForPlayer(ship1);
+                if (ship2.Enabled) frigates[i].HuntForPlayer(ship2);
                 frigates[i].Update();
 
                 if(frigates[i].health <= 0)
@@ -96,9 +116,31 @@ namespace TwinztickShooter.Gamestates
                 {
                     ship2.bullets[b].CollisionCheck(frigates[i]);
                 }
+
+                for (int b = 0; b < frigates[i].frigateBullets.Count; b++)
+                {
+                    frigates[i].frigateBullets[b].CollisionCheck(ship1);
+                    frigates[i].frigateBullets[b].CollisionCheck(ship2);
+                }
+
+                if(ship1.hitBox.Intersects(frigates[i].hitBox))
+                {
+                    score += frigates[i].pointsGained;
+                    frigates.Remove(frigates[i]);
+                    if (i != 0) i--;
+                    ship1.Damage(20);
+                }
+
+                if (ship2.hitBox.Intersects(frigates[i].hitBox))
+                {
+                    score += frigates[i].pointsGained;
+                    frigates.Remove(frigates[i]);
+                    if (i != 0) i--;
+                    ship2.Damage(20);
+                }
             }
 
-            if(rng.Next(50) == 6)
+            if(rng.Next(1000) < 10+score/500)
             {
                 SpawnFrigate();
             }
@@ -110,8 +152,8 @@ namespace TwinztickShooter.Gamestates
             sb.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp);
 
             TileMap.Draw(sb);
-            ship1.Draw(sb);
-            ship2.Draw(sb);
+            if (ship1.Enabled) ship1.Draw(sb);
+            if (ship2.Enabled) ship2.Draw(sb);
 
             sb.DrawString(font, "SCORE: " + score, new Vector2((TwinztickShooter.screenWidth / 2 - (font.MeasureString("SCORE: " + score).X * 5) / 2), 10), Color.Yellow, 0f, Vector2.Zero, 5f, SpriteEffects.None, 0f);
 

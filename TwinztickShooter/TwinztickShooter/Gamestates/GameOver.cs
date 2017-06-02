@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework.Content;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +14,7 @@ namespace TwinztickShooter.Gamestates
 
         }
 
-        public void Init()
+        public void Init(ContentManager cm)
         {
 
         }

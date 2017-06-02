@@ -15,7 +15,6 @@ namespace TwinztickShooter.Sprites.Player
     class PlayerShip : Sprite
     {
         #region Variables
-        private int lives;
         private int screenWidth;
         private int screenHeight;
         private int player;
@@ -39,7 +38,7 @@ namespace TwinztickShooter.Sprites.Player
         //Sets the default variables for the players
         public PlayerShip(int playerNumber)
         {
-            lives = 3;
+            health = 100;
             originPoint = new Vector2(16, 16);
             direction = new Vector2(0, 0);
             acceleration = new Vector2(2, 2);
@@ -289,7 +288,7 @@ namespace TwinztickShooter.Sprites.Player
             Color selectedColor = new Color(rng.Next(255), rng.Next(255), rng.Next(255));
             Matrix m = Matrix.CreateRotationZ((float)Math.Atan2(shipRotation.Y, shipRotation.X));
             Vector2 v = Vector2.Transform(new Vector2(image.Width / 2 + 3, xOffset), m);
-            Bullet newBullet = new Bullet();
+            Bullet newBullet = new Bullet(1);
             newBullet.worldLocation = position + v;
             newBullet.direction = normalizedRotation * Velocity + this.direction;
             newBullet.rotation = rotation;

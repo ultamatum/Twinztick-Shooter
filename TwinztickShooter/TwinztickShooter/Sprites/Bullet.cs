@@ -18,9 +18,11 @@ namespace TwinztickShooter.Sprites
         #endregion
 
         #region Constructor
-        public Bullet()
+        public Bullet(int damage)
         {
             enabled = true;
+
+            this.damage = damage;
         }
         #endregion
 
