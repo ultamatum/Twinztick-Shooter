@@ -26,7 +26,7 @@ namespace TwinztickShooter.Sprites
         public Rectangle hitBox;
         public Rectangle previousHitBox;
 
-        protected bool enabled;
+        protected bool enabled = true;
         #endregion
 
         #region Properties
@@ -69,17 +69,32 @@ namespace TwinztickShooter.Sprites
                 return new Rectangle((int)worldLocation.X, (int)worldLocation.Y, image.Width, image.Height);
             }
         }
+
+        /// <summary>
+        /// Sets / gets the health of the sprite
+        /// </summary>
+        public int Health
+        {
+            get
+            {
+                return health;
+            }
+            set
+            {
+                health -= value;
+            }
+        }
         #endregion
 
         #region Public Methods
         //Updates the position and location of the hitbox
-        public void updateHitbox()
+        public void UpdateHitbox()
         {
             previousHitBox = hitBox;
-            hitBox.X = (int)worldLocation.X;
-            hitBox.Y = (int)worldLocation.Y;
-            hitBox.Width = image.Width;
-            hitBox.Height = image.Height;
+            hitBox.X = (int)worldLocation.X - image.Width / 2;
+            hitBox.Y = (int)worldLocation.Y - image.Height / 2;
+            hitBox.Width = image.Width * 2;
+            hitBox.Height = image.Height * 2;
         }
         #endregion
           

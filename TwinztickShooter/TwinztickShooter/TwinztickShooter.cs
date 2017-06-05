@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
+using System.IO;
 using TwinztickShooter.Gamestates;
 
 namespace TwinztickShooter
@@ -10,15 +12,18 @@ namespace TwinztickShooter
         #region Variables
         Menu menu = new Menu(1920, 1080);
         GamePlay game = new GamePlay();
-        GameOver gameOver = new GameOver();
+        GameOver gameOver = new GameOver(1920, 1080);
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-
+        
+        public static int score = 0;
+        public static int highscore = 0;
         public static int screenWidth = 1920;
         public static int screenHeight = 1080;
 
         private static bool quitGame = false;
+        private static bool justChanged = true;
 
         enum gamestate {menu, gamePlay, gameOver};
         static gamestate currentGameState = gamestate.menu;
@@ -32,7 +37,7 @@ namespace TwinztickShooter
 
             graphics.PreferredBackBufferWidth = screenWidth;
             graphics.PreferredBackBufferHeight = screenHeight;
-            graphics.IsFullScreen = true;
+            graphics.IsFullScreen = false;
         }
         #endregion
 
@@ -42,8 +47,8 @@ namespace TwinztickShooter
             GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
             graphics.ApplyChanges();
             base.Initialize();
-            menu.Init(Content);
-            game.Init(Content);
+
+            LoadHighscore();
         }
         
         protected override void LoadContent()
@@ -67,13 +72,28 @@ namespace TwinztickShooter
             switch(currentGameState)
             {
                 case gamestate.menu:
+                    if(justChanged)
+                    {
+                        menu.Init(Content);
+                        justChanged = false;
+                    }
                     menu.Update();
                     break;
                 case gamestate.gamePlay:
+                    if(justChanged)
+                    {
+                        game.Init(Content);
+                        justChanged = false;
+                    }
                     game.Update();
                     break;
                 case gamestate.gameOver:
-                    gameOver.Update();
+                    if (justChanged)
+                    {
+                        gameOver.Init(Content);
+                        justChanged = false;
+                    }
+                    gameOver.Update(gameTime);
                     break;
             }
 
@@ -88,13 +108,28 @@ namespace TwinztickShooter
             switch(currentGameState)
             {
                 case gamestate.menu:
+                    if (justChanged)
+                    {
+                        menu.Init(Content);
+                        justChanged = false;
+                    }
                     menu.Draw(spriteBatch);
                     break;
                 case gamestate.gamePlay:
+                    if (justChanged)
+                    {
+                        game.Init(Content);
+                        justChanged = false;
+                    }
                     game.Draw(spriteBatch);
                     break;
                 case gamestate.gameOver:
-                    gameOver.Draw();
+                    if (justChanged)
+                    {
+                        game.Init(Content);
+                        justChanged = false;
+                    }
+                    gameOver.Draw(spriteBatch);
                     break;
             }
 
@@ -104,9 +139,11 @@ namespace TwinztickShooter
         /// <summary>
         /// Switch to a different gamestate.
         /// </summary>
-        /// <param name="stateID">1 = Menu, 2 = Play Game, 3 = Game Over</param>
+        /// <param name="stateID">0 = Menu, 1 = Play Game, 2 = Game Over</param>
         public static void SwitchGamestate(int stateID)
         {
+            justChanged = true;
+
             switch(stateID)
             {
                 case 0:
@@ -119,6 +156,28 @@ namespace TwinztickShooter
                     currentGameState = gamestate.gameOver;
                     break;
             }
+        }
+        #endregion
+
+        #region Helper Methods
+        private static void LoadHighscore()
+        {
+            if(File.Exists("score.txt"))
+            {
+                StreamReader inputFile = new StreamReader("score.txt");
+                highscore = Convert.ToInt32(inputFile.ReadLine());
+                inputFile.Close();
+            } else
+            {
+                highscore = 0;
+            }
+        }
+
+        public static void SaveHighScore()
+        {
+            StreamWriter outputFile = new StreamWriter("score.txt");
+            outputFile.WriteLine(highscore);
+            outputFile.Close();
         }
         #endregion
 

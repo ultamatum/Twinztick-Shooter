@@ -18,8 +18,11 @@ namespace TwinztickShooter.Sprites
         #endregion
 
         #region Constructor
-        public Bullet()
+        public Bullet(int damage)
         {
+            enabled = true;
+
+            this.damage = damage;
         }
         #endregion
 
@@ -27,6 +30,8 @@ namespace TwinztickShooter.Sprites
         public void Update()
         {
             worldLocation += direction;
+
+            UpdateHitbox();
 
             if (worldLocation.X < 0 || worldLocation.X > (TileMap.MapWidth * TileMap.TileWidth) || worldLocation.Y < 0 || worldLocation.Y > (TileMap.MapHeight * TileMap.TileHeight))
                 enabled = false;

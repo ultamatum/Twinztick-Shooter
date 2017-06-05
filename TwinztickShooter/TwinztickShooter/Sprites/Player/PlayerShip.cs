@@ -15,31 +15,30 @@ namespace TwinztickShooter.Sprites.Player
     class PlayerShip : Sprite
     {
         #region Variables
-        int lives;
-        int screenWidth;
-        int screenHeight;
-        int player;
-        int curFrame;
-        float friction = 0.85f;
-        float gpx;
-        float gpy;
-        bool leftGun = true;
-        Random rng = new Random();
+        private int screenWidth;
+        private int screenHeight;
+        private int player;
+        private int curFrame;
+        private float friction = 0.85f;
+        private float gpx;
+        private float gpy;
+        private bool leftGun = true;
+        private Random rng = new Random();
 
-        List<Bullet> bullets = new List<Bullet>();
-        Texture2D bulletImage;
+        public List<Bullet> bullets = new List<Bullet>();
+        private Texture2D bulletImage;
 
-        Vector2 originPoint;
-        Vector2 acceleration;
-        Vector2 stickPosition;
-        Vector2 shipRotation;
+        private Vector2 originPoint;
+        private Vector2 acceleration;
+        private Vector2 stickPosition;
+        private Vector2 shipRotation;
         #endregion
 
         #region Constructor
         //Sets the default variables for the players
         public PlayerShip(int playerNumber)
         {
-            lives = 3;
+            health = 100;
             originPoint = new Vector2(16, 16);
             direction = new Vector2(0, 0);
             acceleration = new Vector2(2, 2);
@@ -74,7 +73,7 @@ namespace TwinztickShooter.Sprites.Player
         {
             curFrame++;
 
-            updateHitbox();
+            UpdateHitbox();
             UpdateRotation();
             UpdateDirection();
 
@@ -87,6 +86,9 @@ namespace TwinztickShooter.Sprites.Player
             for (int i = 0; i < bullets.Count(); i++)
             {
                 bullets[i].Update();
+
+                if (bullets[i].Enabled == false)
+                    bullets.Remove(bullets[i]);
             }
 
             #region Player Dependent Updates
@@ -157,24 +159,15 @@ namespace TwinztickShooter.Sprites.Player
                 direction *= 0;
             }
             #endregion
-
-            #region Bullet Edge Check
-            //Checks if the bullets have fallen off the world and if they have it removes them
-            for(int i = 0; i < bullets.Count; i++)
-            {
-                if(!enabled)
-                    bullets.Remove(bullets[i]);
-            }
-            #endregion
         }
 
-        public void Draw(SpriteBatch sp)
+        public void Draw(SpriteBatch sb)
         {
-            sp.Draw(image, Camera.WorldToScreen(worldLocation), null, tint, rotation, originPoint, 1.0f, SpriteEffects.None, 0);
+            sb.Draw(image, Camera.WorldToScreen(worldLocation), null, tint, rotation, originPoint, 1.0f, SpriteEffects.None, 0);
 
             for (int i = 0; i < bullets.Count(); i++)
             {
-                bullets[i].Draw(sp);
+                bullets[i].Draw(sb);
             }
         }
         #endregion
@@ -295,7 +288,7 @@ namespace TwinztickShooter.Sprites.Player
             Color selectedColor = new Color(rng.Next(255), rng.Next(255), rng.Next(255));
             Matrix m = Matrix.CreateRotationZ((float)Math.Atan2(shipRotation.Y, shipRotation.X));
             Vector2 v = Vector2.Transform(new Vector2(image.Width / 2 + 3, xOffset), m);
-            Bullet newBullet = new Bullet();
+            Bullet newBullet = new Bullet(1);
             newBullet.worldLocation = position + v;
             newBullet.direction = normalizedRotation * Velocity + this.direction;
             newBullet.rotation = rotation;
