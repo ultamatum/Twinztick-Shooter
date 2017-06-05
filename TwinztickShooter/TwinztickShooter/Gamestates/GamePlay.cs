@@ -22,6 +22,7 @@ namespace TwinztickShooter.Gamestates
         public List<Frigate> frigates = new List<Frigate>();
 
         public Texture2D frigateImage;
+        public Texture2D healthBar;
         private SpriteFont font;
 
         private Random rng = new Random();
@@ -48,6 +49,7 @@ namespace TwinztickShooter.Gamestates
             TileMap.Initialize(cm.Load<Texture2D>("starmap"));
             frigateImage = cm.Load<Texture2D>("Enemies/Enemy Frigate");
             font = cm.Load<SpriteFont>("Pixel Font");
+            healthBar = cm.Load<Texture2D>("Healthbar Inside");
 
             Camera.ViewPortWidth = 1920;
             Camera.ViewPortHeight = 1080;
@@ -154,6 +156,10 @@ namespace TwinztickShooter.Gamestates
             if (ship2.Enabled) ship2.Draw(sb);
 
             sb.DrawString(font, "SCORE: " + TwinztickShooter.score, new Vector2((TwinztickShooter.screenWidth / 2 - (font.MeasureString("SCORE: " + TwinztickShooter.score).X * 5) / 2), 10), Color.Yellow, 0f, Vector2.Zero, 5f, SpriteEffects.None, 0f);
+
+            sb.Draw(healthBar, new Rectangle(100, 1020, ship1.health * 2, 25), Color.White);
+
+            sb.Draw(healthBar, new Rectangle(1820 - (ship2.health * 2), 1020, ship2.health * 2, 25), Color.White);
 
             for (int i = 0; i < frigates.Count; i++)
             {
