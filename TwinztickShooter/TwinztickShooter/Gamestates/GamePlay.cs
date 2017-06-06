@@ -23,6 +23,7 @@ namespace TwinztickShooter.Gamestates
 
         public Texture2D frigateImage;
         public Texture2D healthBar;
+        public Texture2D healthBarHolder;
         private SpriteFont font;
 
         private Random rng = new Random();
@@ -50,6 +51,7 @@ namespace TwinztickShooter.Gamestates
             frigateImage = cm.Load<Texture2D>("Enemies/Enemy Frigate");
             font = cm.Load<SpriteFont>("Pixel Font");
             healthBar = cm.Load<Texture2D>("Healthbar Inside");
+            healthBarHolder = cm.Load<Texture2D>("Healthbar Holder");
 
             Camera.ViewPortWidth = 1920;
             Camera.ViewPortHeight = 1080;
@@ -157,9 +159,12 @@ namespace TwinztickShooter.Gamestates
 
             sb.DrawString(font, "SCORE: " + TwinztickShooter.score, new Vector2((TwinztickShooter.screenWidth / 2 - (font.MeasureString("SCORE: " + TwinztickShooter.score).X * 5) / 2), 10), Color.Yellow, 0f, Vector2.Zero, 5f, SpriteEffects.None, 0f);
 
-            sb.Draw(healthBar, new Rectangle(100, 1020, ship1.health * 2, 25), Color.White);
+            sb.Draw(healthBar, null, new Rectangle(100, 1000, ship1.health * 2, 25), null, null, 0, null, Color.White, SpriteEffects.None, 0.1f);
+            if (ship1.health != 0) sb.Draw(healthBarHolder, new Vector2(86, 992), null, null, null, 0, null, Color.Red, SpriteEffects.None, 0f);
 
-            sb.Draw(healthBar, new Rectangle(1820 - (ship2.health * 2), 1020, ship2.health * 2, 25), Color.White);
+            sb.Draw(healthBar, null, new Rectangle(1820 - (ship2.health * 2), 1000, ship2.health * 2, 25), null, null, 0, null, Color.White, SpriteEffects.None, 0.1f);
+            if (ship2.health != 0) sb.Draw(healthBarHolder, new Vector2(1606, 992), null, null, null, 0, null, Color.Blue, SpriteEffects.None, 0f);
+
 
             for (int i = 0; i < frigates.Count; i++)
             {
@@ -185,7 +190,7 @@ namespace TwinztickShooter.Gamestates
             frigates.Add(newFrigate);
         }
       
-        public void startup()
+        public void startup() 
         {
             Camera.ViewPortWidth = 1920;
             Camera.ViewPortHeight = 1080;

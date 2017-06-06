@@ -37,7 +37,7 @@ namespace TwinztickShooter
 
             graphics.PreferredBackBufferWidth = screenWidth;
             graphics.PreferredBackBufferHeight = screenHeight;
-            graphics.IsFullScreen = false;
+            graphics.IsFullScreen = true;
         }
         #endregion
 
@@ -147,15 +147,12 @@ namespace TwinztickShooter
             switch(stateID)
             {
                 case 0:
-                    if (justChanged) return;
                     currentGameState = gamestate.menu;
                     break;
                 case 1:
-                    if (justChanged) return;
                     currentGameState = gamestate.gamePlay;
                     break;
                 case 2:
-                    if (justChanged) return;
                     currentGameState = gamestate.gameOver;
                     break;
             }
