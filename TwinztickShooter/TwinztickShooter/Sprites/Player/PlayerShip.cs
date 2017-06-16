@@ -63,6 +63,8 @@ namespace TwinztickShooter.Sprites.Player
         //Loads the neccesary images
         public void Init(ContentManager cm)
         {
+            health = 100;
+            enabled = true;
             image = cm.Load<Texture2D>("Player/ship" + player);
             bulletImage = cm.Load<Texture2D>("Bullet");
         }

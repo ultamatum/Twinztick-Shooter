@@ -45,6 +45,11 @@ namespace TwinztickShooter.Gamestates
             ship1.Init(cm);
             ship2.Init(cm);
 
+            for(int i = 0; i < frigates.Count(); i++)
+            {
+                frigates.Remove(frigates[i]);
+            }
+
             Frigate.Init(cm);
             
             TileMap.Initialize(cm.Load<Texture2D>("starmap"));
@@ -52,6 +57,8 @@ namespace TwinztickShooter.Gamestates
             font = cm.Load<SpriteFont>("Pixel Font");
             healthBar = cm.Load<Texture2D>("Healthbar Inside");
             healthBarHolder = cm.Load<Texture2D>("Healthbar Holder");
+
+            TwinztickShooter.score = 0;
 
             Camera.ViewPortWidth = 1920;
             Camera.ViewPortHeight = 1080;

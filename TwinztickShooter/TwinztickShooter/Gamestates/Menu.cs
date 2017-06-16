@@ -16,9 +16,8 @@ namespace TwinztickShooter.Gamestates
         #region Declarations
         private int currentChoice = 0;
         private Random rng = new Random();
-        private String[] options = new String[3] {
+        private String[] options = new String[2] {
             "PLAY",
-            "SETTINGS",
             "QUIT"
         };
         
@@ -49,6 +48,8 @@ namespace TwinztickShooter.Gamestates
 
             TileMap.Initialize(cm.Load<Texture2D>("starmap"));
 
+            optionTimer = 40;
+
             Camera.ViewPortWidth = 1920;
             Camera.ViewPortHeight = 1080;
             Camera.WorldRectangle = new Rectangle(0, 0, TileMap.MapWidth * TileMap.TileWidth, TileMap.MapHeight * TileMap.TileHeight);
@@ -63,7 +64,7 @@ namespace TwinztickShooter.Gamestates
         {
             optionTimer--;
 
-            if (GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.A))
+            if (GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.A) && optionTimer <= 0)
             {
                 switch(currentChoice)
                 {
@@ -71,9 +72,6 @@ namespace TwinztickShooter.Gamestates
                         TwinztickShooter.SwitchGamestate(1);
                         break;
                     case 1:
-
-                        break;
-                    case 2:
                         TwinztickShooter.ExitGame();
                         break;
                 }
